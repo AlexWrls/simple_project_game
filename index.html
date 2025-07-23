@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project3</title>
+    <script th:src="@{main.js}" src="main.js"></script>
+    <script th:src="@{stages.js}" src="stages.js"></script>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: #222;
+        }
+
+        canvas {
+            border: 2px solid #444;
+            background: #333;
+            /*block-size: 50%;*/
+        }
+    </style>
+
+</head>
+<body>
+<canvas id="instCanvas" width="1000" height="800"></canvas>
+
+<script>
+
+    // Инициализация canvas
+    const canvas = document.getElementById('instCanvas');
+    const ctx = canvas.getContext('2d');
+    const GRID_SIZE = 60
+    const game_debug = false
+    const inst = {
+        stage: 1,
+        time: {},
+        ready: false,
+        fps: 0,
+        player: {},
+        walls: [],
+        ladders: [],
+        boxes: [],
+        buttons: [],
+        gates: [],
+        target: {},
+        keys: {},
+        eventKey: {},
+    }
+
+    const background = new Image();
+    background.src = 'src/cover.png'
+    // background.onload = function background() {
+        //     const scale = Math.min(canvas.width / background.width, canvas.height / background.height);
+        //     const width = background.width * scale;
+        //     const height = background.height * scale;
+        //     ctx.drawImage(background, (canvas.width - width) / 2, (canvas.height - height) / 2, width, height);
+    // }
+
+    function preview() {
+        inst.player = null
+        inst.target = null
+        inst.boxes = []
+        inst.walls = []
+        inst.ladders = []
+        inst.buttons = []
+        inst.gates = []
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = '#8a8a8a';
+        ctx.font = '40px Calibri';
+        ctx.fillText(`Уровень ${inst.stage}`, 100, 300);
+        if (inst.stage === 1) {
+            ctx.font = '30px Calibri';
+            ctx.fillText("Помоги коту добраться до корзинки с яйцами ", 200, 400);
+        } else {
+            ctx.font = '50px Calibri';
+            ctx.fillText("Супер!", 400, 400);
+        }
+        ctx.font = '30px Calibri';
+        ctx.fillText("Нажимай Enter ", 700, 500);
+    }
+
+    function initial() {
+        preview()
+        stages.get(inst.stage)();
+        clearInterval(inst.time)
+        main()
+        inst.time = setInterval(() => {
+            main()
+        }, 8)
+    }
+
+
+    function main(timestamp) {
+        // Очистка canvas
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        if (!game_debug) {
+            ctx.drawImage(background, 0, 0,canvas.width, canvas.height);
+        }
+        // Расчет FPS
+        if (inst.lastTime) {
+            inst.fps = Math.round(1000 / (timestamp - inst.lastTime));
+        }
+
+        if (inst.player.x === inst.target.x && inst.player.y === inst.target.y) {
+            clearInterval(inst.time)
+            inst.stage++
+            preview()
+        }
+        //------ Основное перемещение -------------
+        inst.player.gravity = !inst.player.collision(inst.player.x, inst.player.y, [...inst.ladders])
+            && !inst.player.collision(inst.player.x, inst.player.y + GRID_SIZE, [...inst.walls, ...inst.boxes, ...inst.ladders])
+        if (inst.player.gravity) {
+            inst.player.targetY = inst.player.y + GRID_SIZE;
+            inst.player.isFalling = true;
+            inst.player.isMoving = true;
+        }
+        inst.player.move()
+        for (const box of inst.boxes) {
+            box.gravity = !box.collision(box.x, box.y + GRID_SIZE, [...inst.walls, ...inst.boxes, ...inst.ladders, inst.player])
+            if (box.gravity) {
+                box.targetY = box.y + GRID_SIZE;
+                box.isMoving = true;
+            }
+            box.move()
+        }
+        //------ /Кнопки - Ворота-------------
+        for (const button of inst.buttons) {
+            button.checkState()
+            for (const obj of inst.boxes) {
+                button.active = obj.collision(obj.targetX, obj.targetY, [button]) || inst.player.collision(inst.player.targetX, inst.player.targetY, [button])
+            }
+        }
+        for (const gate of inst.gates) {
+            gate.checkState()
+            if (!gate.open && !inst.walls.includes(gate)) {
+                inst.walls.push(gate)
+            }
+            if (gate.open && inst.walls.includes(gate)) {
+                inst.walls = inst.walls.filter(wall => !wall.open)
+            }
+        }
+        //------ Кнопки - Ворота/ -------------
+
+        inst.buttons.forEach(e => console.log(e.type + "|" + e.active))
+        inst.gates.forEach(e => console.log(e.type + "|" + e.open))
+        //-------------------
+
+        if (game_debug) {
+            for (const obj of [...inst.walls, ...inst.ladders, ...inst.boxes, ...inst.buttons, inst.target, inst.player]) {
+                ctx.fillStyle = obj.color;
+                ctx.fillRect(obj.x, obj.y, obj.width, obj.height);
+                ctx.fillText(`${obj.id}`, obj.x, obj.y);
+            }
+            //сетка
+            for (let i = 0; i < canvas.width; i += GRID_SIZE) {
+                for (let j = 0; j < canvas.height; j += GRID_SIZE) {
+                    ctx.fillStyle = '#e1e1e0';
+                    ctx.font = '12px Calibri';
+                    ctx.fillText(`x:${i / GRID_SIZE} y:${j / GRID_SIZE}`, i + 3, j + 25);
+                    ctx.strokeRect(i, j, GRID_SIZE, GRID_SIZE);
+                }
+            }
+        } else {
+            const drawObj = [inst.target, ...inst.walls, ...inst.boxes, ...inst.gates, ...inst.buttons]
+                .sort((a, b) => a.targetX - b.targetX || b.targetY - a.targetY || b.zIndex - a.zIndex)
+            // drawObj.forEach(i=>console.log(i.x))
+            for (const obj of [...inst.ladders, ...drawObj]) {
+                obj.draw()
+            }
+            inst.player.draw()
+        }
+
+        // Отрисовка информации
+        ctx.fillStyle = '#fff';
+        ctx.font = '16px Calibri';
+        ctx.fillText(`Steps: ${inst.player.steps}`, 10, 20);
+        inst.lastTime = timestamp;
+        // requestAnimationFrame(main)
+    }
+
+    // Обработчики клавиатуры
+    onkeydown = (e) => {
+        e.preventDefault();
+        if (e.key === 'Enter') {
+            initial()
+        }
+        inst.eventKey = e.key
+        inst.keys = e.key;
+        if (inst.player.isMoving || inst.player.gravity) {
+            return;
+        }
+        let targetY = e.key === 'ArrowDown' ? inst.player.y + GRID_SIZE : inst.player.y - GRID_SIZE;
+        let targetX = e.key === 'ArrowRight' ? inst.player.x + GRID_SIZE : inst.player.x - GRID_SIZE
+        inst.player.onLadder = inst.player.collision(inst.player.x, inst.player.y, [...inst.ladders]) ||
+            (e.key === 'ArrowDown' && inst.player.collision(inst.player.x, inst.player.y + GRID_SIZE, [...inst.ladders]))
+        if (inst.player.onLadder && !inst.player.isMoving && !inst.player.collision(inst.player.x, targetY, [...inst.walls]) && ['ArrowUp', 'ArrowDown'].includes(e.key)) {
+            inst.player.isPush = false;
+            inst.player.targetY = targetY;
+            inst.player.isMoving = true;
+        } else if (['ArrowLeft', 'ArrowRight'].includes(e.key)) {
+            let isCollisionBox = false;
+            if (!inst.player.isMoving && !inst.player.collision(targetX, inst.player.y, [...inst.walls])) {
+                for (const box of [...inst.boxes]) {
+                    if (!box.isMoving && !box.gravity && inst.player.collision(targetX, inst.player.y, [box])) {
+                        const dirX = box.x - inst.player.x > 1 ? GRID_SIZE : -GRID_SIZE;
+                        const boxTargetX = box.x + dirX;
+                        inst.player.isPush = true;
+                        isCollisionBox = true;
+                        if (!box.collision(boxTargetX, box.y, [...inst.boxes, ...inst.walls])) {
+                            box.targetX = boxTargetX;
+                            box.isMoving = true;
+                            inst.player.targetX = targetX;
+                            inst.player.isMoving = true;
+                        }
+                    }
+                }
+                if (!isCollisionBox) {
+                    inst.player.isPush = false;
+                    inst.player.targetX = targetX;
+                    inst.player.isMoving = true;
+                }
+            }
+        }
+    }
+
+    onkeyup = (e) => {
+        e.preventDefault();
+        inst.eventKey = 'stop'
+    };
+
+    preview()
+
+
+</script>
+</body>
