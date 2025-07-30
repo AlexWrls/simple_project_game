@@ -32,13 +32,14 @@
 
     // Инициализация canvas
     const canvas = document.getElementById('instCanvas');
+    // canvas.height = window.innerHeight;
+    // canvas.width = window.innerWidth;
     const ctx = canvas.getContext('2d');
     const GRID_SIZE = 60
     const game_debug = false
     const inst = {
         stage: 1,
         time: {},
-        ready: false,
         fps: 0,
         player: {},
         walls: [],
@@ -54,13 +55,15 @@
     const background = new Image();
     background.src = 'src/cover.png'
     // background.onload = function background() {
-        //     const scale = Math.min(canvas.width / background.width, canvas.height / background.height);
-        //     const width = background.width * scale;
-        //     const height = background.height * scale;
-        //     ctx.drawImage(background, (canvas.width - width) / 2, (canvas.height - height) / 2, width, height);
+    //     const scale = Math.min(canvas.width / background.width, canvas.height / background.height);
+    //     const width = background.width * scale;
+    //     const height = background.height * scale;
+    //     ctx.drawImage(background, (canvas.width - width) / 2, (canvas.height - height) / 2, width, height);
     // }
 
     function preview() {
+        clearInterval(inst.time)
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
         inst.player = null
         inst.target = null
         inst.boxes = []
@@ -68,10 +71,12 @@
         inst.ladders = []
         inst.buttons = []
         inst.gates = []
+        stages.get(inst.stage)();
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.fillStyle = '#8a8a8a';
+        ctx.fillStyle = '#02850c';
         ctx.font = '40px Calibri';
         ctx.fillText(`Уровень ${inst.stage}`, 100, 300);
+        ctx.fillStyle = '#caccc1';
         if (inst.stage === 1) {
             ctx.font = '30px Calibri';
             ctx.fillText("Помоги коту добраться до корзинки с яйцами ", 200, 400);
@@ -80,14 +85,13 @@
             ctx.fillText("Супер!", 400, 400);
         }
         ctx.font = '30px Calibri';
-        ctx.fillText("Нажимай Enter ", 700, 500);
+        ctx.fillStyle = '#69d1e3';
+        ctx.fillText(`Для начала уровня заново жми 'Enter'`, 100, 650);
+        ctx.fillText(`Переключение уровней: клавиша 'Z'- назад, клавиша 'X' - вперед`, 100, 700);
     }
 
-    function initial() {
+     function initial() {
         preview()
-        stages.get(inst.stage)();
-        clearInterval(inst.time)
-        main()
         inst.time = setInterval(() => {
             main()
         }, 8)
@@ -98,18 +102,14 @@
         // Очистка canvas
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         if (!game_debug) {
-            ctx.drawImage(background, 0, 0,canvas.width, canvas.height);
+            ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
         }
         // Расчет FPS
         if (inst.lastTime) {
             inst.fps = Math.round(1000 / (timestamp - inst.lastTime));
         }
 
-        if (inst.player.x === inst.target.x && inst.player.y === inst.target.y) {
-            clearInterval(inst.time)
-            inst.stage++
-            preview()
-        }
+
         //------ Основное перемещение -------------
         inst.player.gravity = !inst.player.collision(inst.player.x, inst.player.y, [...inst.ladders])
             && !inst.player.collision(inst.player.x, inst.player.y + GRID_SIZE, [...inst.walls, ...inst.boxes, ...inst.ladders])
@@ -130,9 +130,8 @@
         //------ /Кнопки - Ворота-------------
         for (const button of inst.buttons) {
             button.checkState()
-            for (const obj of inst.boxes) {
-                button.active = obj.collision(obj.targetX, obj.targetY, [button]) || inst.player.collision(inst.player.targetX, inst.player.targetY, [button])
-            }
+            button.active = inst.boxes.some(box => box.collision(box.targetX, box.targetY, [button])) ||
+                inst.player.collision(inst.player.targetX, inst.player.targetY, [button])
         }
         for (const gate of inst.gates) {
             gate.checkState()
@@ -145,8 +144,8 @@
         }
         //------ Кнопки - Ворота/ -------------
 
-        inst.buttons.forEach(e => console.log(e.type + "|" + e.active))
-        inst.gates.forEach(e => console.log(e.type + "|" + e.open))
+        // inst.buttons.forEach(e => console.log(e.type + "|" + e.active))
+        // inst.gates.forEach(e => console.log(e.type + "|" + e.open))
         //-------------------
 
         if (game_debug) {
@@ -176,10 +175,17 @@
 
         // Отрисовка информации
         ctx.fillStyle = '#fff';
-        ctx.font = '16px Calibri';
-        ctx.fillText(`Steps: ${inst.player.steps}`, 10, 20);
+        ctx.font = '25px Calibri';
+        // ctx.fillText(`Steps: ${inst.player.steps}`, 10, 20);
+        ctx.fillText(`Для начала уровня заново жми 'Enter'`, 10, 20);
+        ctx.fillText(`Переключение уровней 'Z'- назад, 'X' - вперед`, 10, 40);
+
         inst.lastTime = timestamp;
-        // requestAnimationFrame(main)
+        //Проверка прохождения
+        if (inst.player.x === inst.target.x && inst.player.y === inst.target.y) {
+            inst.stage++
+            preview()
+        }
     }
 
     // Обработчики клавиатуры
@@ -187,6 +193,14 @@
         e.preventDefault();
         if (e.key === 'Enter') {
             initial()
+        }
+        if (e.which === 90) {
+            if (inst.stage > 1) inst.stage--
+            preview()
+        }
+        if (e.which === 88) {
+            if (inst.stage < 6) inst.stage++
+            preview()
         }
         inst.eventKey = e.key
         inst.keys = e.key;

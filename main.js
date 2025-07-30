@@ -7,8 +7,8 @@ class Rect {
     color;
 
     constructor(x, y, width, height, color) {
-        this.id = Math.round(Math.random() * Math.pow(2, 10));
-        // console.log(this.id)
+        this.id = Math.round(Math.random() * Math.pow(50, 10));
+        console.log(this.id)
         this.x = x * GRID_SIZE;
         this.y = y * GRID_SIZE;
         this.width = width * GRID_SIZE;
@@ -109,17 +109,17 @@ class Gate extends MoveRect {
     zIndex;
     type;
 
-    constructor(x, y, width, height, color, type, buttons) {
+    constructor(x, y, width, height, color, type) {
         super(x, y, width, height, color);
-        this.zIndex = 1
+        this.zIndex = 10
         this.type = type
-        this.buttons = buttons
-        this.open = buttons.some(btn => btn.active)
+        this.buttons = inst.buttons.filter(btn => btn.type === type)
+        this.open = this.buttons.some(btn => btn.active)
         this.imgStand = new Image()
     }
 
     checkState() {
-        this.open = this.buttons.some(btn => btn.active)
+        this.open = this.buttons.some(btn => btn.active) || this.collision(this.x, this.y, [...inst.boxes, inst.player])
         if (this.open) {
             this.imgStand.src = `src/obj/gate/gate_open.png`
         } else {
@@ -206,7 +206,7 @@ class Player extends MoveRect {
     imgRightPush;
     imgLeftPush;
     imgStand;
-    imgFail;
+    imgFalling;
     isPush;
     tick;
     zIndex;
@@ -221,13 +221,13 @@ class Player extends MoveRect {
         this.imgLeftPush = new Image()
         this.imgStand = new Image()
         this.imgStand = new Image()
-        this.imgFail = new Image()
+        this.imgFalling = new Image()
         this.imgLeft.src = 'src/player/10-cat-left.png'
         this.imgRight.src = 'src/player/10-cat-right.png'
         this.imgRightPush.src = 'src/player/cat-right-push.png'
         this.imgLeftPush.src = 'src/player/cat-left-push.png'
         this.imgStand.src = 'src/player/cat-stand.png'
-        this.imgFail.src = 'src/player/cat-fail.png'
+        this.imgFalling.src = 'src/player/cat-fail.png'
         this.tick = 0
         setInterval(() => {
             this.tick++
@@ -260,12 +260,12 @@ class Player extends MoveRect {
         } else {
             let imgLeft
             let imgRight
-             if (this.isFalling) {
-                 imgLeft = imgRight = this.imgFail
-             } else {
+            if (this.isFalling) {
+                imgLeft = imgRight = this.imgFalling
+            } else {
                 imgLeft = this.isPush ? this.imgLeftPush : this.imgLeft
                 imgRight = this.isPush ? this.imgRightPush : this.imgRight
-             }
+            }
             ctx.drawImage(
                 this.targetX <= this.x && left ? imgLeft : imgRight,        // изображение спрайт-листа
                 Math.floor(xf), 0, Math.floor(srcWidth), Math.floor(srcHeight),  // исходные координаты (x,y,w,h)

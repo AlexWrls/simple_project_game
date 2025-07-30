@@ -93,10 +93,39 @@ stages.set(5, () => {
     inst.boxes.push(new Box(9, 7, 1, 1, 'rgba(183,113,28,1)'))
 
     // buttons
-    const btn1 = new Button(8, 7, 1, 1, 'rgba(138,22,2,0.5)','blue')
-    inst.buttons.push(btn1)
-    inst.gates.push(new Gate(13, 7, 1, 1, 'rgb(138,22,2)','blue',[btn1]))
+    inst.buttons.push(new Button(8, 7, 1, 1, 'rgba(138,22,2,0.5)','blue'))
+    inst.gates.push(new Gate(13, 7, 1, 1, 'rgb(138,22,2)','blue'))
 
     inst.player = new Player(4, 7, 1, 1, 'rgba(15,75,208,1)')
     inst.target = new Gold(15, 7, 1, 1, 'rgba(105,209,227,1)')
+});
+
+// Шестой уровень
+stages.set(6, () => {
+    // walls
+    inst.walls.push(new Ground(1, 10, 13, 1, 'rgba(2,138,12,1)'))
+    inst.walls.push(new Ground(14, 11, 1, 1, 'rgba(2,138,12,1)'))
+    inst.walls.push(new Ground(15, 10, 1, 1, 'rgba(2,138,12,1)'))
+    inst.walls.push(new Ground(4, 7, 6, 1, 'rgba(2,138,12,1)'))
+    inst.walls.push(new Ground(3, 4, 4, 1, 'rgba(2,138,12,1)'))
+    inst.walls.push(new Ground(8, 4, 5, 1, 'rgba(2,138,12,1)'))
+    // ladders
+    inst.ladders.push(new Ladder(10, 7, 1, 3, 'rgba(225,225,224,1)'))
+    inst.ladders.push(new Ladder(7, 4, 1, 3, 'rgba(225,225,224,1)'))
+    // boxes
+    inst.boxes.push(new Box(3, 3, 1, 1, 'rgba(183,113,28,1)'))
+    inst.boxes.push(new Box(4, 3, 1, 1, 'rgba(183,113,28,1)'))
+    inst.boxes.push(new Box(4, 2, 1, 1, 'rgba(183,113,28,1)'))
+    inst.boxes.push(new Box(9, 1, 1, 1, 'rgba(183,113,28,1)'))
+
+
+    // buttons
+    inst.buttons.push(new Button(2, 9, 1, 1, 'rgba(138,22,2,0.5)','blue'))
+    inst.buttons.push(new Button(8, 9, 1, 1, 'rgba(138,22,2,0.5)','yelow'))
+    //gate
+    inst.gates.push(new Gate(9, 3, 1, 1, 'rgb(138,22,2)','blue'))
+    inst.gates.push(new Gate(13, 9, 1, 1, 'rgb(138,22,2)','yelow'))
+
+    inst.player = new Player(4, 9, 1, 1, 'rgba(15,75,208,1)')
+    inst.target = new Gold(15, 9, 1, 1, 'rgba(105,209,227,1)')
 });
