@@ -121,11 +121,32 @@ stages.set(6, () => {
 
     // buttons
     inst.buttons.push(new Button(2, 9, 1, 1, 'rgba(138,22,2,0.5)','blue'))
-    inst.buttons.push(new Button(8, 9, 1, 1, 'rgba(138,22,2,0.5)','yelow'))
+    inst.buttons.push(new Button(8, 9, 1, 1, 'rgba(138,22,2,0.5)','yellow'))
     //gate
     inst.gates.push(new Gate(9, 3, 1, 1, 'rgb(138,22,2)','blue'))
-    inst.gates.push(new Gate(13, 9, 1, 1, 'rgb(138,22,2)','yelow'))
+    inst.gates.push(new Gate(13, 9, 1, 1, 'rgb(138,22,2)','yellow'))
 
     inst.player = new Player(4, 9, 1, 1, 'rgba(15,75,208,1)')
     inst.target = new Gold(15, 9, 1, 1, 'rgba(105,209,227,1)')
 });
+
+// // Седьмой уровень
+// stages.set(7, () => {
+//     // walls
+//     inst.walls.push(new Ground(1, 10, 13, 1, 'rgba(2,138,12,1)'))
+
+//     // ladders
+//     inst.ladders.push(new Ladder(10, 7, 1, 3, 'rgba(225,225,224,1)'))
+
+//     // boxes
+//     inst.boxes.push(new Box(3, 3, 1, 1, 'rgba(183,113,28,1)'))
+//
+//
+//     // buttons
+//     inst.buttons.push(new Button(2, 9, 1, 1, 'rgba(138,22,2,0.5)','blue'))
+//     //gate
+//     inst.gates.push(new Gate(9, 3, 1, 1, 'rgb(138,22,2)','blue'))
+//
+//     inst.player = new Player(4, 9, 1, 1, 'rgba(15,75,208,1)')
+//     inst.target = new Gold(15, 9, 1, 1, 'rgba(105,209,227,1)')
+// });

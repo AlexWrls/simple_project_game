@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Project3</title>
     <script th:src="@{main.js}" src="main.js"></script>
+    <script th:src="@{sound.js}" src="sound.js"></script>
     <script th:src="@{stages.js}" src="stages.js"></script>
     <style>
         body {
@@ -50,6 +51,7 @@
         target: {},
         keys: {},
         eventKey: {},
+        audio: []
     }
 
     const background = new Image();
@@ -61,7 +63,9 @@
     //     ctx.drawImage(background, (canvas.width - width) / 2, (canvas.height - height) / 2, width, height);
     // }
 
+
     function preview() {
+        inst.audio.get('back').play()
         clearInterval(inst.time)
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         inst.player = null
@@ -90,7 +94,7 @@
         ctx.fillText(`Переключение уровней: клавиша 'Z'- назад, клавиша 'X' - вперед`, 100, 700);
     }
 
-     function initial() {
+    function initial() {
         preview()
         inst.time = setInterval(() => {
             main()
@@ -217,6 +221,7 @@
             inst.player.isMoving = true;
         } else if (['ArrowLeft', 'ArrowRight'].includes(e.key)) {
             let isCollisionBox = false;
+            inst.audio.get('step').play()
             if (!inst.player.isMoving && !inst.player.collision(targetX, inst.player.y, [...inst.walls])) {
                 for (const box of [...inst.boxes]) {
                     if (!box.isMoving && !box.gravity && inst.player.collision(targetX, inst.player.y, [box])) {

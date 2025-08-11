@@ -78,6 +78,7 @@ class MoveRect extends Rect {
 class Button extends MoveRect {
     imgStand;
     active;
+    wasActive;
     type;
     zIndex;
 
@@ -86,6 +87,7 @@ class Button extends MoveRect {
         this.zIndex = 10
         this.type = type
         this.active = false
+        this.wasActive = false
         this.imgStand = new Image()
     }
 
@@ -94,6 +96,17 @@ class Button extends MoveRect {
             this.imgStand.src = `src/obj/gate/btn_${this.type}_push.png`
         } else {
             this.imgStand.src = `src/obj/gate/btn_${this.type}.png`
+        }
+        if (this.active) {
+            if (!this.wasActive) {
+                inst.audio.get('btn').play()
+                this.wasActive = true
+            }
+        } else {
+            if (this.wasActive) {
+                inst.audio.get('btn').play()
+                this.wasActive = false
+            }
         }
     }
 
@@ -105,6 +118,7 @@ class Button extends MoveRect {
 class Gate extends MoveRect {
     imgStand;
     open;
+    wasOpen;
     buttons;
     zIndex;
     type;
@@ -115,6 +129,7 @@ class Gate extends MoveRect {
         this.type = type
         this.buttons = inst.buttons.filter(btn => btn.type === type)
         this.open = this.buttons.some(btn => btn.active)
+        this.wasOpen = this.buttons.some(btn => btn.active)
         this.imgStand = new Image()
     }
 
@@ -124,6 +139,17 @@ class Gate extends MoveRect {
             this.imgStand.src = `src/obj/gate/gate_open.png`
         } else {
             this.imgStand.src = `src/obj/gate/gate_${this.type}.png`
+        }
+        if (this.open) {
+            if (!this.wasOpen) {
+                inst.audio.get('open').play()
+                this.wasOpen = true
+            }
+        } else {
+            if (this.wasOpen) {
+                inst.audio.get('close').play()
+                this.wasOpen = false
+            }
         }
     }
 
@@ -207,6 +233,7 @@ class Player extends MoveRect {
     imgLeftPush;
     imgStand;
     imgFalling;
+    imgLadder;
     isPush;
     tick;
     zIndex;
@@ -222,12 +249,14 @@ class Player extends MoveRect {
         this.imgStand = new Image()
         this.imgStand = new Image()
         this.imgFalling = new Image()
+        this.imgLadder = new Image()
         this.imgLeft.src = 'src/player/10-cat-left.png'
         this.imgRight.src = 'src/player/10-cat-right.png'
         this.imgRightPush.src = 'src/player/cat-right-push.png'
         this.imgLeftPush.src = 'src/player/cat-left-push.png'
         this.imgStand.src = 'src/player/cat-stand.png'
         this.imgFalling.src = 'src/player/cat-fail.png'
+        this.imgLadder.src = 'src/player/cat-ladder.png'
         this.tick = 0
         setInterval(() => {
             this.tick++
@@ -255,13 +284,19 @@ class Player extends MoveRect {
         inst.keys = !this.isMoving && inst.eventKey === 'stop' ? 'stop' : inst.keys
         const left = inst.keys === 'ArrowLeft'
         const right = inst.keys === 'ArrowRight'
-        if (!this.isMoving && !left && !right) {
+        const up = inst.keys === 'ArrowUp'
+        const down = inst.keys === 'ArrowDown'
+        if (!this.isMoving && !left && !right && !up && !down) {
+            inst.audio.get('step').pause()
             ctx.drawImage(this.imgStand, this.x + offsetX, this.y + offsetY, scaledWidth + 5, scaledHeight + 5)
         } else {
             let imgLeft
             let imgRight
             if (this.isFalling) {
+                inst.audio.get('step').pause()
                 imgLeft = imgRight = this.imgFalling
+            } else if (this.onLadder && !left && !right) {
+                imgLeft = imgRight = this.imgLadder
             } else {
                 imgLeft = this.isPush ? this.imgLeftPush : this.imgLeft
                 imgRight = this.isPush ? this.imgRightPush : this.imgRight
