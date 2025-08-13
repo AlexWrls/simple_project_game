@@ -1,9 +1,9 @@
-window.onload = function initSound() {
+function initSound() {
     let map = new Map()
 
     let backSound = new Audio();
     backSound.src = 'src/sound/back_sound.mp3';
-    backSound.volume = 0.1
+    backSound.volume = 0.4
     backSound.loop = true;
     map.set('back', backSound)
 
@@ -23,13 +23,13 @@ window.onload = function initSound() {
     let openGate = new Audio();
     openGate.src = 'src/sound/open.mp3';
     openGate.playbackRate = 3
-    openGate.volume = 1
+    openGate.volume = 0.8
     map.set('open', openGate)
 
     let closeGate = new Audio();
     closeGate.src = 'src/sound/close.mp3';
     closeGate.playbackRate = 3
-    closeGate.volume = 1
+    closeGate.volume = 0.8
     map.set('close', closeGate)
 
     let fall = new Audio();
