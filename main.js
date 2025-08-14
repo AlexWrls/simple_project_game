@@ -162,16 +162,40 @@ class Gate extends MoveRect {
 class Gold extends MoveRect {
     imgStand;
     zIndex;
+    tick;
 
     constructor(x, y, width, height, color) {
         super(x, y, width, height, color);
         this.zIndex = 1
         this.imgStand = new Image()
-        this.imgStand.src = `src/obj/target.png`
+        this.imgStand.src = `src/obj/target1.png`
+        this.tick = 0
+        setInterval(() => {
+            this.tick++
+            if (this.tick >= 4) {
+                this.tick = 0
+            }
+        }, 120)
     }
 
     draw() {
-        ctx.drawImage(this.imgStand, this.x + 20, this.y + 25, GRID_SIZE - 10, GRID_SIZE - 10)
+        // ctx.drawImage(this.imgStand, this.x + 20, this.y + 25, GRID_SIZE - 10, GRID_SIZE - 10)
+
+        let frame = this.tick % 10;
+        let xf = frame * 100;
+        const srcWidth = 100;
+        const srcHeight = 100;
+        //  масштаб по меньшей стороне
+        const scale = Math.min(GRID_SIZE / srcWidth, GRID_SIZE / srcHeight);
+        const scaledWidth = srcWidth * scale;
+        const scaledHeight = srcHeight * scale;
+
+        ctx.drawImage(
+            this.imgStand,        // изображение спрайт-листа
+            Math.floor(xf), 0, Math.floor(srcWidth), Math.floor(srcHeight),  // исходные координаты (x,y,w,h)
+            Math.floor(this.x ), Math.floor(this.y ),
+            Math.floor(scaledWidth), Math.floor(scaledHeight),  // конечные координаты (x,y,w,h)
+        );
     }
 }
 
