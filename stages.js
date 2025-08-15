@@ -133,7 +133,12 @@ stages.set(6, () => {
 // Седьмой уровень
 stages.set(7, () => {
     // walls
-    inst.walls.push(new Ground(1, 10, 14, 1, 'rgba(2,138,12,1)'))
+    inst.walls.push(new Ground(1, 10, 6, 1, 'rgba(2,138,12,1)'))
+    inst.walls.push(new Ground(9, 10, 5, 1, 'rgba(2,138,12,1)'))
+    inst.walls.push(new Ground(14, 11, 1, 1, 'rgba(2,138,12,1)'))
+    inst.walls.push(new Ground(15, 10, 1, 1, 'rgba(2,138,12,1)'))
+    inst.walls.push(new Ground(6, 2, 3, 1, 'rgba(2,138,12,1)'))
+    inst.walls.push(new Ground(7, 11, 2, 1, 'rgba(2,138,12,1)'))
     inst.walls.push(new Ground(6, 2, 3, 1, 'rgba(2,138,12,1)'))
     inst.walls.push(new Ground(9, 7, 3, 1, 'rgba(2,138,12,1)'))
     inst.walls.push(new Ground(3, 2, 2, 1, 'rgba(2,138,12,1)'))
@@ -144,14 +149,17 @@ stages.set(7, () => {
 
     // boxes
     inst.boxes.push(new Box(12, 9, 1, 1, 'rgba(183,113,28,1)'))
-    inst.boxes.push(new Barrel(9, 5, 1, 1, 'rgba(183,113,28,1)'))
-    inst.boxes.push(new Barrel(9, 6, 1, 1, 'rgba(183,113,28,1)'))
+    inst.boxes.push(new Box(9, 3, 1, 1, 'rgba(183,113,28,1)'))
+    inst.boxes.push(new Box(9, 4, 1, 1, 'rgba(183,113,28,1)'))
+    inst.boxes.push(new Box(9, 5, 1, 1, 'rgba(183,113,28,1)'))
+    inst.boxes.push(new Box(9, 6, 1, 1, 'rgba(183,113,28,1)'))
+    inst.boxes.push(new Barrel(9, 2, 1, 1, 'rgba(183,113,28,1)'))
     inst.boxes.push(new Barrel(4, 1, 1, 1, 'rgba(183,113,28,1)'))
 
 
     // buttons
     inst.buttons.push(new Button(1, 9, 1, 1, 'rgba(138,22,2,0.5)','blue'))
-    inst.buttons.push(new Button(7, 9, 1, 1, 'rgba(234,223,0,0.5)','yellow'))
+    inst.buttons.push(new Button(14, 10, 1, 1, 'rgba(234,223,0,0.5)','yellow'))
     //gate
     inst.gates.push(new Gate(7, 1, 1, 1, 'rgb(138,22,2)','blue'))
     inst.gates.push(new Gate(3, 1, 1, 1, 'rgb(132,127,26)','yellow'))
