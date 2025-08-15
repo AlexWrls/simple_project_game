@@ -34,9 +34,9 @@ function initSound() {
 
     let fall = new Audio();
     fall.src = 'src/sound/fall.mp3';
-    fall.playbackRate = 1
-    fall.volume = 1
-    map.set('fall', closeGate)
+    fall.playbackRate = 1.5
+    fall.volume = 0.6
+    map.set('fall', fall)
 
     inst.audio = map
 }

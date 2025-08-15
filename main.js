@@ -63,6 +63,9 @@ class MoveRect extends Rect {
 
         if (dy === 0 && dx === 0) {
             this.isMoving = false
+            if (this.isFalling){
+                inst.audio.get('fall').play()
+            }
             this.isFalling = false
             return
         }
@@ -116,7 +119,8 @@ class Button extends MoveRect {
 }
 
 class Gate extends MoveRect {
-    imgStand;
+    imgClose;
+    imgOpen;
     open;
     wasOpen;
     buttons;
@@ -130,16 +134,14 @@ class Gate extends MoveRect {
         this.buttons = inst.buttons.filter(btn => btn.type === type)
         this.open = this.buttons.some(btn => btn.active)
         this.wasOpen = this.buttons.some(btn => btn.active)
-        this.imgStand = new Image()
+        this.imgClose = new Image()
+        this.imgOpen = new Image()
+        this.imgClose.src = `src/obj/gate/gate_${this.type}.png`
+        this.imgOpen.src = `src/obj/gate/gate_open.png`
     }
 
     checkState() {
         this.open = this.buttons.some(btn => btn.active) || this.collision(this.x, this.y, [...inst.boxes, inst.player])
-        if (this.open) {
-            this.imgStand.src = `src/obj/gate/gate_open.png`
-        } else {
-            this.imgStand.src = `src/obj/gate/gate_${this.type}.png`
-        }
         if (this.open) {
             if (!this.wasOpen) {
                 inst.audio.get('open').play()
@@ -154,7 +156,7 @@ class Gate extends MoveRect {
     }
 
     draw() {
-        ctx.drawImage(this.imgStand, this.x, this.y + 10, GRID_SIZE + 20, GRID_SIZE + 20)
+        ctx.drawImage(this.open? this.imgOpen: this.imgClose, this.x, this.y + 10, GRID_SIZE + 20, GRID_SIZE + 20)
     }
 }
 
@@ -193,7 +195,7 @@ class Gold extends MoveRect {
         ctx.drawImage(
             this.imgStand,        // изображение спрайт-листа
             Math.floor(xf), 0, Math.floor(srcWidth), Math.floor(srcHeight),  // исходные координаты (x,y,w,h)
-            Math.floor(this.x ), Math.floor(this.y ),
+            Math.floor(this.x), Math.floor(this.y),
             Math.floor(scaledWidth), Math.floor(scaledHeight),  // конечные координаты (x,y,w,h)
         );
     }
@@ -232,6 +234,63 @@ class Ground extends MoveRect {
     }
 }
 
+class Barrel extends MoveRect {
+    imgStand;
+    imgMove;
+    zIndex;
+    direction;
+    tick;
+
+    constructor(x, y, width, height, color) {
+        super(x, y, width, height, color);
+        this.zIndex = 2
+        this.direction = 0
+        this.imgStand = new Image()
+        this.imgMove = new Image()
+        this.imgStand.src = 'src/obj/barrel.png'
+        this.imgMove.src = 'src/obj/barrel_move.png'
+        this.tick = 0
+        setInterval(() => {
+            this.tick++
+            if (this.tick >= 4) {
+                this.tick = 0
+            }
+        }, 120)
+    }
+
+    checkState() {
+        if (this.direction !== 0 && !this.isMoving && !this.collision(this.x + this.direction, this.y, [...inst.walls, ...inst.boxes])) {
+            this.targetX = this.x + this.direction
+        } else if (!this.isMoving && this.direction !== 0) {
+            inst.audio.get('fall').play()
+            this.targetX = this.x
+            this.direction = 0
+        }
+    }
+
+    draw() {
+        if (!this.isMoving){
+            ctx.drawImage(this.imgStand, this.x, this.y, GRID_SIZE +35, GRID_SIZE +35)
+        } else {
+            let frame = this.tick % 10;
+            let xf = frame * 100;
+            const srcWidth = 100;
+            const srcHeight = 100;
+            //  масштаб по меньшей стороне
+            const scale = Math.min(GRID_SIZE / srcWidth, GRID_SIZE / srcHeight);
+            const scaledWidth = srcWidth * scale;
+            const scaledHeight = srcHeight * scale;
+
+            ctx.drawImage(
+                this.imgMove,        // изображение спрайт-листа
+                Math.floor(xf), 0, Math.floor(srcWidth), Math.floor(srcHeight),  // исходные координаты (x,y,w,h)
+                Math.floor(this.x), Math.floor(this.y),
+                Math.floor(scaledWidth +35), Math.floor(scaledHeight+35),  // конечные координаты (x,y,w,h)
+            );
+        }
+    }
+}
+
 class Box extends MoveRect {
     imgStand;
     zIndex;
@@ -244,9 +303,9 @@ class Box extends MoveRect {
     }
 
     draw() {
-        //  масштаб по меньшей стороне
         ctx.drawImage(this.imgStand, this.x, this.y, GRID_SIZE + 20, GRID_SIZE + 20)
     }
+    checkState() {}
 }
 
 class Player extends MoveRect {

@@ -130,23 +130,72 @@ stages.set(6, () => {
     inst.target = new Gold(15, 9, 1, 1, 'rgba(105,209,227,1)')
 });
 
-// // Седьмой уровень
-// stages.set(7, () => {
-//     // walls
-//     inst.walls.push(new Ground(1, 10, 13, 1, 'rgba(2,138,12,1)'))
+// Седьмой уровень
+stages.set(7, () => {
+    // walls
+    inst.walls.push(new Ground(1, 10, 14, 1, 'rgba(2,138,12,1)'))
+    inst.walls.push(new Ground(6, 2, 3, 1, 'rgba(2,138,12,1)'))
+    inst.walls.push(new Ground(9, 7, 3, 1, 'rgba(2,138,12,1)'))
+    inst.walls.push(new Ground(3, 2, 2, 1, 'rgba(2,138,12,1)'))
 
-//     // ladders
-//     inst.ladders.push(new Ladder(10, 7, 1, 3, 'rgba(225,225,224,1)'))
+    // ladders
+    inst.ladders.push(new Ladder(5, 2, 1, 7, 'rgba(225,225,224,1)'))
+    inst.ladders.push(new Ladder(12, 7, 1, 3, 'rgba(225,225,224,1)'))
 
-//     // boxes
-//     inst.boxes.push(new Box(3, 3, 1, 1, 'rgba(183,113,28,1)'))
-//
-//
-//     // buttons
-//     inst.buttons.push(new Button(2, 9, 1, 1, 'rgba(138,22,2,0.5)','blue'))
-//     //gate
-//     inst.gates.push(new Gate(9, 3, 1, 1, 'rgb(138,22,2)','blue'))
-//
-//     inst.player = new Player(4, 9, 1, 1, 'rgba(15,75,208,1)')
-//     inst.target = new Gold(15, 9, 1, 1, 'rgba(105,209,227,1)')
-// });
+    // boxes
+    inst.boxes.push(new Box(12, 9, 1, 1, 'rgba(183,113,28,1)'))
+    inst.boxes.push(new Barrel(9, 5, 1, 1, 'rgba(183,113,28,1)'))
+    inst.boxes.push(new Barrel(9, 6, 1, 1, 'rgba(183,113,28,1)'))
+    inst.boxes.push(new Barrel(4, 1, 1, 1, 'rgba(183,113,28,1)'))
+
+
+    // buttons
+    inst.buttons.push(new Button(1, 9, 1, 1, 'rgba(138,22,2,0.5)','blue'))
+    inst.buttons.push(new Button(7, 9, 1, 1, 'rgba(234,223,0,0.5)','yellow'))
+    //gate
+    inst.gates.push(new Gate(7, 1, 1, 1, 'rgb(138,22,2)','blue'))
+    inst.gates.push(new Gate(3, 1, 1, 1, 'rgb(132,127,26)','yellow'))
+
+    inst.player = new Player(9, 9, 1, 1, 'rgba(15,75,208,1)')
+    inst.target = new Gold(8, 1, 1, 1, 'rgba(105,209,227,1)')
+});
+
+// Седьмой уровень
+stages.set(8, () => {
+    // walls
+    inst.walls.push(new Ground(1, 10, 15, 1, 'rgba(2,138,12,1)'))
+
+    //E
+    inst.boxes.push(new Barrel(3, 5, 1, 1, 'rgba(183,113,28,1)'))
+    inst.boxes.push(new Barrel(3, 6, 1, 1, 'rgba(183,113,28,1)'))
+    inst.boxes.push(new Barrel(3, 7, 1, 1, 'rgba(183,113,28,1)'))
+    inst.boxes.push(new Barrel(3, 8, 1, 1, 'rgba(183,113,28,1)'))
+    inst.boxes.push(new Barrel(3, 9, 1, 1, 'rgba(183,113,28,1)'))
+    inst.walls.push(new Ground(4, 5, 2, 1, 'rgba(2,138,12,1)'))
+    inst.walls.push(new Ground(4, 7, 2, 1, 'rgba(2,138,12,1)'))
+    inst.walls.push(new Ground(4, 9, 2, 1, 'rgba(2,138,12,1)'))
+
+    //N
+    inst.ladders.push(new Ladder(7, 5, 1, 5, 'rgba(225,225,224,1)'))
+    inst.ladders.push(new Ladder(10, 5, 1, 5, 'rgba(225,225,224,1)'))
+    inst.ladders.push(new Ladder(8, 7, 1, 2, 'rgba(225,225,224,1)'))
+    inst.ladders.push(new Ladder(9, 5, 1, 2, 'rgba(225,225,224,1)'))
+
+    //D
+    inst.boxes.push(new Box(12, 5, 1, 1, 'rgb(136,110,0)'))
+    inst.boxes.push(new Box(12, 6, 1, 1, 'rgb(136,110,0)'))
+    inst.boxes.push(new Box(12, 7, 1, 1, 'rgb(136,110,0)'))
+    inst.boxes.push(new Box(12, 8, 1, 1, 'rgb(136,110,0)'))
+    inst.boxes.push(new Box(12, 9, 1, 1, 'rgb(136,110,0)'))
+    inst.walls.push(new Ground(13, 5, 2, 1, 'rgba(2,138,12,1)'))
+    inst.boxes.push(new Box(15, 6, 1, 1, 'rgba(183,113,28,1)'))
+    inst.boxes.push(new Box(15, 7, 1, 1, 'rgba(183,113,28,1)'))
+
+
+    inst.ladders.push(new Ladder(13, 9, 1, 1, 'rgba(225,225,224,1)'))
+    inst.ladders.push(new Ladder(14, 9, 1, 1, 'rgba(225,225,224,1)'))
+    inst.ladders.push(new Ladder(15, 8, 1, 1, 'rgba(225,225,224,1)'))
+
+    inst.player = new Player(9, 9, 1, 1, 'rgba(15,75,208,1)')
+    inst.target = new Gold(8, 1, 1, 1, 'rgba(105,209,227,1)')
+});
