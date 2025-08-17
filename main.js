@@ -63,7 +63,7 @@ class MoveRect extends Rect {
 
         if (dy === 0 && dx === 0) {
             this.isMoving = false
-            if (this.isFalling){
+            if (this.isFalling) {
                 inst.audio.get('fall').play()
             }
             this.isFalling = false
@@ -156,7 +156,7 @@ class Gate extends MoveRect {
     }
 
     draw() {
-        ctx.drawImage(this.open? this.imgOpen: this.imgClose, this.x, this.y + 10, GRID_SIZE + 20, GRID_SIZE + 20)
+        ctx.drawImage(this.open ? this.imgOpen : this.imgClose, this.x, this.y + 10, GRID_SIZE + 20, GRID_SIZE + 20)
     }
 }
 
@@ -269,8 +269,8 @@ class Barrel extends MoveRect {
     }
 
     draw() {
-        if (!this.isMoving){
-            ctx.drawImage(this.imgStand, this.x, this.y, GRID_SIZE +35, GRID_SIZE +35)
+        if (!this.isMoving) {
+            ctx.drawImage(this.imgStand, this.x, this.y, GRID_SIZE + 35, GRID_SIZE + 35)
         } else {
             let frame = this.tick % 10;
             let xf = frame * 100;
@@ -285,7 +285,7 @@ class Barrel extends MoveRect {
                 this.imgMove,        // изображение спрайт-листа
                 Math.floor(xf), 0, Math.floor(srcWidth), Math.floor(srcHeight),  // исходные координаты (x,y,w,h)
                 Math.floor(this.x), Math.floor(this.y),
-                Math.floor(scaledWidth +35), Math.floor(scaledHeight+35),  // конечные координаты (x,y,w,h)
+                Math.floor(scaledWidth + 35), Math.floor(scaledHeight + 35),  // конечные координаты (x,y,w,h)
             );
         }
     }
@@ -305,7 +305,9 @@ class Box extends MoveRect {
     draw() {
         ctx.drawImage(this.imgStand, this.x, this.y, GRID_SIZE + 20, GRID_SIZE + 20)
     }
-    checkState() {}
+
+    checkState() {
+    }
 }
 
 class Player extends MoveRect {
@@ -385,7 +387,7 @@ class Player extends MoveRect {
                 imgRight = this.isPush ? this.imgRightPush : this.imgRight
             }
             ctx.drawImage(
-                this.targetX <= this.x && left ? imgLeft : imgRight,        // изображение спрайт-листа
+                left ? imgLeft : imgRight,        // изображение спрайт-листа
                 Math.floor(xf), 0, Math.floor(srcWidth), Math.floor(srcHeight),  // исходные координаты (x,y,w,h)
                 Math.floor(this.x + offsetX), Math.floor(this.y + offsetY),
                 Math.floor(scaledWidth), Math.floor(scaledHeight),  // конечные координаты (x,y,w,h)

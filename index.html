@@ -208,11 +208,11 @@
             if (inst.stage < 8) inst.stage++
             preview()
         }
-        inst.eventKey = e.key
-        inst.keys = e.key;
         if (inst.player.isMoving || inst.player.gravity) {
             return;
         }
+        inst.eventKey = e.key
+        inst.keys = e.key;
         let targetY = e.key === 'ArrowDown' ? inst.player.y + GRID_SIZE : inst.player.y - GRID_SIZE;
         let targetX = e.key === 'ArrowRight' ? inst.player.x + GRID_SIZE : inst.player.x - GRID_SIZE
         inst.player.onLadder = inst.player.collision(inst.player.x, inst.player.y, [...inst.ladders]) ||
