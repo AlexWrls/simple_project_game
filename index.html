@@ -11,30 +11,90 @@
         body {
             margin: 0;
             overflow: hidden;
-            display: flex;
+            display: grid;
             justify-content: center;
             align-items: center;
             height: 100vh;
             background: #222;
         }
 
-        canvas {
-            border: 2px solid #444;
-            background: #333;
-            /*block-size: 50%;*/
+        .controls {
+            justify-content: right;
+            margin-top: 0.5rem;
+            display: flex;
+            gap: 0.5rem;
         }
+        .controls-stage {
+            justify-content: left;
+            margin-top: 0.5rem;
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .control-button {
+            padding: 0.75rem 1.5rem;
+            background-color: #4a5568;
+            color: #e2e8f0;
+            font-weight: bold;
+            border-radius: 0.5rem;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.1s;
+        }
+
+        .control-button:hover {
+            background-color: #6a778c;
+        }
+
+        .control-button:active {
+            transform: scale(0.98);
+        }
+
+        .game-container {
+            width: 98vw;
+            height: 80vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+            border-radius: 1rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        canvas {
+            border: 4px solid #4a5568;
+            display: block;
+            background: #333;
+            max-width: 100%;
+            max-height: 100%;
+        }
+
     </style>
 
 </head>
 <body>
-<canvas id="instCanvas" width="1000" height="800"></canvas>
+<div class="game-container">
+    <canvas id="instCanvas"></canvas>
+</div>
+<span class="controls-stage">
+    <button id="enter_button" class="control-button">Enter</button>
+    <button id="z_button"  class="control-button">next</button>
+    <button id="x_button"  class="control-button">prev</button>
+</span>
+    <span class="controls">
+    <button id="up_button" class="control-button">Вверх</button>
+    <button id="down_button" class="control-button">Вниз</button>
+    <button id="left_button" class="control-button">Влево</button>
+    <button id="right_button" class="control-button">Вправо</button>
+</span>
 
 <script>
 
     // Инициализация canvas
     const canvas = document.getElementById('instCanvas');
-    // canvas.height = window.innerHeight;
-    // canvas.width = window.innerWidth;
+    const baseWidth = 1000;
+    const baseHeight = 800;
     const ctx = canvas.getContext('2d');
     const GRID_SIZE = 60
     const game_debug = false
@@ -65,7 +125,6 @@
 
 
     function preview() {
-        inst.audio.get('back').play()
         clearInterval(inst.time)
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         inst.player = null
@@ -96,6 +155,9 @@
 
     function initial() {
         preview()
+        try {
+            inst.audio.get('back').play()
+        } catch (e){}
         inst.time = setInterval(() => {
             main()
         }, 8)
@@ -195,35 +257,64 @@
     }
 
     // Обработчики клавиатуры
-    onkeydown = (e) => {
-        e.preventDefault();
-        if (e.key === 'Enter') {
-            initial()
+    onkeydown = (e) => { e.preventDefault(); handlePlayerInput(e.key);};
+    onkeyup = (e) => { e.preventDefault();inst.eventKey = 'stop' };
+
+    // Обработчики кнопок
+    document.getElementById('up_button').addEventListener('touchstart', (e) => {e.preventDefault(); handlePlayerInput('ArrowUp');});
+    document.getElementById('up_button').addEventListener('touchend', () =>  inst.eventKey = 'stop');
+
+    document.getElementById('down_button').addEventListener('touchstart', (e) => { e.preventDefault(); handlePlayerInput('ArrowDown');});
+    document.getElementById('down_button').addEventListener('touchend', () =>  inst.eventKey = 'stop');
+
+    document.getElementById('left_button').addEventListener('touchstart', (e) => {e.preventDefault(); handlePlayerInput('ArrowLeft');});
+    document.getElementById('left_button').addEventListener('touchend', () =>  inst.eventKey = 'stop');
+
+    document.getElementById('right_button').addEventListener('touchstart', (e) => {e.preventDefault();handlePlayerInput('ArrowRight');});
+    document.getElementById('right_button').addEventListener('touchend', () =>  inst.eventKey = 'stop');
+    // Кнопки для "Enter","Z","X"
+    document.getElementById('enter_button').addEventListener('touchstart', () => {handlePlayerInput('Enter');});
+    document.getElementById('z_button').addEventListener('touchstart', (e) => { e.preventDefault();handlePlayerInput('z'); });
+    document.getElementById('x_button').addEventListener('touchstart', (e) => {e.preventDefault(); handlePlayerInput('x'); });
+
+    const handlePlayerInput = (key) => {
+        if (key === 'Enter') {
+            initial();
         }
-        if (e.which === 90) {
-            if (inst.stage > 1) inst.stage--
-            preview()
+        if (key === 'z') {
+            if (inst.stage > 1) inst.stage--;
+            preview();
         }
-        if (e.which === 88) {
-            if (inst.stage < 8) inst.stage++
-            preview()
+        if (key === 'x') {
+            if (inst.stage < 8) inst.stage++;
+            preview();
         }
+
+        // Если игрок уже движется
         if (inst.player.isMoving || inst.player.gravity) {
             return;
         }
-        inst.eventKey = e.key
-        inst.keys = e.key;
-        let targetY = e.key === 'ArrowDown' ? inst.player.y + GRID_SIZE : inst.player.y - GRID_SIZE;
-        let targetX = e.key === 'ArrowRight' ? inst.player.x + GRID_SIZE : inst.player.x - GRID_SIZE
+
+        inst.eventKey = key;
+        inst.keys = key;
+
+        let targetY = key === 'ArrowDown' ? inst.player.y + GRID_SIZE : inst.player.y - GRID_SIZE;
+        let targetX = key === 'ArrowRight' ? inst.player.x + GRID_SIZE : inst.player.x - GRID_SIZE;
+
+        // Логика движения по лестнице
         inst.player.onLadder = inst.player.collision(inst.player.x, inst.player.y, [...inst.ladders]) ||
-            (e.key === 'ArrowDown' && inst.player.collision(inst.player.x, inst.player.y + GRID_SIZE, [...inst.ladders]))
-        if (inst.player.onLadder && !inst.player.isMoving && !inst.player.collision(inst.player.x, targetY, [...inst.walls]) && ['ArrowUp', 'ArrowDown'].includes(e.key)) {
+            (key === 'ArrowDown' && inst.player.collision(inst.player.x, inst.player.y + GRID_SIZE, [...inst.ladders]));
+
+        if (inst.player.onLadder && !inst.player.isMoving && !inst.player.collision(inst.player.x, targetY, [...inst.walls]) && ['ArrowUp', 'ArrowDown'].includes(key)) {
             inst.player.isPush = false;
             inst.player.targetY = targetY;
             inst.player.isMoving = true;
-        } else if (['ArrowLeft', 'ArrowRight'].includes(e.key)) {
+
+            // Логика горизонтального движения
+        } else if (['ArrowLeft', 'ArrowRight'].includes(key)) {
             let isCollisionBox = false;
-            inst.audio.get('step').play()
+            inst.audio.get('step').play();
+
             if (!inst.player.isMoving && !inst.player.collision(targetX, inst.player.y, [...inst.walls])) {
                 for (const box of [...inst.boxes]) {
                     if (!box.isMoving && !box.gravity && inst.player.collision(targetX, inst.player.y, [box])) {
@@ -233,7 +324,7 @@
                         isCollisionBox = true;
                         if (!box.collision(boxTargetX, box.y, [...inst.boxes, ...inst.walls])) {
                             box.targetX = boxTargetX;
-                            box.direction = dirX
+                            box.direction = dirX;
                             box.isMoving = true;
                             inst.player.targetX = targetX;
                             inst.player.isMoving = true;
@@ -247,16 +338,28 @@
                 }
             }
         }
-    }
-
-    onkeyup = (e) => {
-        e.preventDefault();
-        inst.eventKey = 'stop'
     };
 
     initSound()
     preview()
 
+    // Функция для адаптации размера канваса
+    function resizeCanvas() {
+        const container = canvas.parentElement;
+        const containerWidth = container.clientWidth;
+        const containerHeight = container.clientHeight;
+
+        const scale = Math.min(containerWidth / baseWidth, containerHeight / baseHeight);
+
+        canvas.width = baseWidth;
+        canvas.height = baseHeight;
+
+        canvas.style.width = `${baseWidth * scale*0.8}px`;
+        canvas.style.height =  `${baseHeight * scale*0.8}px`;
+        preview()
+    }
+    window.addEventListener('load', resizeCanvas);
+    window.addEventListener('resize', resizeCanvas);
 
 </script>
 </body>
