@@ -11,90 +11,28 @@
         body {
             margin: 0;
             overflow: hidden;
-            display: grid;
+            display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
             background: #222;
         }
 
-        .controls {
-            justify-content: right;
-            margin-top: 0.5rem;
-            display: flex;
-            gap: 0.5rem;
-        }
-        .controls-stage {
-            justify-content: left;
-            margin-top: 0.5rem;
-            display: flex;
-            gap: 0.5rem;
-        }
-
-        .control-button {
-            padding: 0.75rem 1.5rem;
-            background-color: #4a5568;
-            color: #e2e8f0;
-            font-weight: bold;
-            border-radius: 0.5rem;
-            border: none;
-            cursor: pointer;
-            transition: background-color 0.3s, transform 0.1s;
-        }
-
-        .control-button:hover {
-            background-color: #6a778c;
-        }
-
-        .control-button:active {
-            transform: scale(0.98);
-        }
-
-        .game-container {
-            width: 98vw;
-            height: 80vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
-            position: relative;
-            border-radius: 1rem;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-        }
-
         canvas {
-            border: 4px solid #4a5568;
-            display: block;
+            border: 2px solid #444;
             background: #333;
-            max-width: 100%;
-            max-height: 100%;
+            /*block-size: 50%;*/
         }
-
     </style>
 
 </head>
 <body>
-<div class="game-container">
-    <canvas id="instCanvas"></canvas>
-</div>
-<span class="controls-stage">
-    <button id="enter_button" class="control-button">Enter</button>
-    <button id="z_button"  class="control-button">next</button>
-    <button id="x_button"  class="control-button">prev</button>
-</span>
-    <span class="controls">
-    <button id="up_button" class="control-button">Вверх</button>
-    <button id="down_button" class="control-button">Вниз</button>
-    <button id="left_button" class="control-button">Влево</button>
-    <button id="right_button" class="control-button">Вправо</button>
-</span>
-
+<canvas id="instCanvas"></canvas>
 <script>
-
     // Инициализация canvas
     const canvas = document.getElementById('instCanvas');
-    const baseWidth = 1000;
-    const baseHeight = 800;
+    const baseWidth = 1200;
+    const baseHeight = 1000;
     const ctx = canvas.getContext('2d');
     const GRID_SIZE = 60
     const game_debug = false
@@ -157,7 +95,8 @@
         preview()
         try {
             inst.audio.get('back').play()
-        } catch (e){}
+        } catch (e) {
+        }
         inst.time = setInterval(() => {
             main()
         }, 8)
@@ -257,25 +196,15 @@
     }
 
     // Обработчики клавиатуры
-    onkeydown = (e) => { e.preventDefault(); handlePlayerInput(e.key);};
-    onkeyup = (e) => { e.preventDefault();inst.eventKey = 'stop' };
+    onkeydown = (e) => {
+        e.preventDefault();
+        handlePlayerInput(e.key);
+    };
 
-    // Обработчики кнопок
-    document.getElementById('up_button').addEventListener('touchstart', (e) => {e.preventDefault(); handlePlayerInput('ArrowUp');});
-    document.getElementById('up_button').addEventListener('touchend', () =>  inst.eventKey = 'stop');
-
-    document.getElementById('down_button').addEventListener('touchstart', (e) => { e.preventDefault(); handlePlayerInput('ArrowDown');});
-    document.getElementById('down_button').addEventListener('touchend', () =>  inst.eventKey = 'stop');
-
-    document.getElementById('left_button').addEventListener('touchstart', (e) => {e.preventDefault(); handlePlayerInput('ArrowLeft');});
-    document.getElementById('left_button').addEventListener('touchend', () =>  inst.eventKey = 'stop');
-
-    document.getElementById('right_button').addEventListener('touchstart', (e) => {e.preventDefault();handlePlayerInput('ArrowRight');});
-    document.getElementById('right_button').addEventListener('touchend', () =>  inst.eventKey = 'stop');
-    // Кнопки для "Enter","Z","X"
-    document.getElementById('enter_button').addEventListener('touchstart', () => {handlePlayerInput('Enter');});
-    document.getElementById('z_button').addEventListener('touchstart', (e) => { e.preventDefault();handlePlayerInput('z'); });
-    document.getElementById('x_button').addEventListener('touchstart', (e) => {e.preventDefault(); handlePlayerInput('x'); });
+    onkeyup = (e) => {
+        e.preventDefault();
+        inst.eventKey = 'stop'
+    };
 
     const handlePlayerInput = (key) => {
         if (key === 'Enter') {
@@ -286,7 +215,7 @@
             preview();
         }
         if (key === 'x') {
-            if (inst.stage < 8) inst.stage++;
+            if (inst.stage < 9) inst.stage++;
             preview();
         }
 
@@ -354,8 +283,8 @@
         canvas.width = baseWidth;
         canvas.height = baseHeight;
 
-        canvas.style.width = `${baseWidth * scale*0.8}px`;
-        canvas.style.height =  `${baseHeight * scale*0.8}px`;
+        canvas.style.width = `${baseWidth * scale}px`;
+        canvas.style.height = `${baseHeight * scale}px`;
         preview()
     }
     window.addEventListener('load', resizeCanvas);
