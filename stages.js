@@ -4,6 +4,10 @@ const stages = new Map();
 stages.set(1, () => {
     // walls
     inst.walls.push(new Ground(3, 8, 8, 1, 'rgba(2,138,12,1)'))
+    // inventory
+    inst.inventory.set('box', 5)
+    inst.inventory.set('barrel', 5)
+    inst.inventory.set('ladder', 5)
 
     inst.player = new Player(3, 7, 1, 1, 'rgba(15,75,208,1)')
     inst.target = new Gold(10, 7, 1, 1, 'rgba(105,209,227,1)')
@@ -72,10 +76,10 @@ stages.set(4, () => {
     inst.boxes.push(new Box(14, 4, 1, 1, 'rgba(183,113,28,1)'))
     inst.boxes.push(new Box(9, 10, 1, 1, 'rgba(183,113,28,1)'))
     inst.boxes.push(new Box(9, 11, 1, 1, 'rgba(183,113,28,1)'))
-    inst.boxes.push(new Box(9,12, 1, 1, 'rgba(183,113,28,1)'))
-    inst.boxes.push(new Box(7,2, 1, 1, 'rgba(183,113,28,1)'))
-    inst.boxes.push(new Box(9,2, 1, 1, 'rgba(183,113,28,1)'))
-    inst.boxes.push(new Box(9,1, 1, 1, 'rgba(183,113,28,1)'))
+    inst.boxes.push(new Box(9, 12, 1, 1, 'rgba(183,113,28,1)'))
+    inst.boxes.push(new Box(7, 2, 1, 1, 'rgba(183,113,28,1)'))
+    inst.boxes.push(new Box(9, 2, 1, 1, 'rgba(183,113,28,1)'))
+    inst.boxes.push(new Box(9, 1, 1, 1, 'rgba(183,113,28,1)'))
 
 
     inst.player = new Player(8, 2, 1, 1, 'rgba(15,75,208,1)')
@@ -93,8 +97,8 @@ stages.set(5, () => {
     inst.boxes.push(new Box(9, 7, 1, 1, 'rgba(183,113,28,1)'))
 
     // buttons
-    inst.buttons.push(new Button(8, 7, 1, 1, 'rgba(138,22,2,0.5)','blue'))
-    inst.gates.push(new Gate(13, 7, 1, 1, 'rgb(138,22,2)','blue'))
+    inst.buttons.push(new Button(8, 7, 1, 1, 'rgba(138,22,2,0.5)', 'blue'))
+    inst.gates.push(new Gate(13, 7, 1, 1, 'rgb(138,22,2)', 'blue'))
 
     inst.player = new Player(4, 7, 1, 1, 'rgba(15,75,208,1)')
     inst.target = new Gold(15, 7, 1, 1, 'rgba(105,209,227,1)')
@@ -120,11 +124,11 @@ stages.set(6, () => {
 
 
     // buttons
-    inst.buttons.push(new Button(2, 9, 1, 1, 'rgba(138,22,2,0.5)','blue'))
-    inst.buttons.push(new Button(8, 9, 1, 1, 'rgba(138,22,2,0.5)','yellow'))
+    inst.buttons.push(new Button(2, 9, 1, 1, 'rgba(138,22,2,0.5)', 'blue'))
+    inst.buttons.push(new Button(8, 9, 1, 1, 'rgba(138,22,2,0.5)', 'yellow'))
     //gate
-    inst.gates.push(new Gate(9, 3, 1, 1, 'rgb(138,22,2)','blue'))
-    inst.gates.push(new Gate(13, 9, 1, 1, 'rgb(138,22,2)','yellow'))
+    inst.gates.push(new Gate(9, 3, 1, 1, 'rgb(138,22,2)', 'blue'))
+    inst.gates.push(new Gate(13, 9, 1, 1, 'rgb(138,22,2)', 'yellow'))
 
     inst.player = new Player(4, 9, 1, 1, 'rgba(15,75,208,1)')
     inst.target = new Gold(15, 9, 1, 1, 'rgba(105,209,227,1)')
@@ -153,16 +157,17 @@ stages.set(7, () => {
     inst.boxes.push(new Box(9, 4, 1, 1, 'rgba(183,113,28,1)'))
     inst.boxes.push(new Box(9, 5, 1, 1, 'rgba(183,113,28,1)'))
     inst.boxes.push(new Box(9, 6, 1, 1, 'rgba(183,113,28,1)'))
-    inst.boxes.push(new Barrel(9, 2, 1, 1, 'rgba(183,113,28,1)'))
-    inst.boxes.push(new Barrel(4, 1, 1, 1, 'rgba(183,113,28,1)'))
 
+    inst.boxes.push(new Barrel(4, 1, 1, 1, 'rgba(183,113,28,1)'))
+    // inventory
+    inst.inventory.set('box', 1)
 
     // buttons
-    inst.buttons.push(new Button(1, 9, 1, 1, 'rgba(138,22,2,0.5)','blue'))
-    inst.buttons.push(new Button(14, 10, 1, 1, 'rgba(234,223,0,0.5)','yellow'))
+    inst.buttons.push(new Button(1, 9, 1, 1, 'rgba(138,22,2,0.5)', 'blue'))
+    inst.buttons.push(new Button(14, 10, 1, 1, 'rgba(234,223,0,0.5)', 'yellow'))
     //gate
-    inst.gates.push(new Gate(7, 1, 1, 1, 'rgb(138,22,2)','blue'))
-    inst.gates.push(new Gate(3, 1, 1, 1, 'rgb(132,127,26)','yellow'))
+    inst.gates.push(new Gate(7, 1, 1, 1, 'rgb(138,22,2)', 'blue'))
+    inst.gates.push(new Gate(3, 1, 1, 1, 'rgb(132,127,26)', 'yellow'))
 
     inst.player = new Player(9, 9, 1, 1, 'rgba(15,75,208,1)')
     inst.target = new Gold(8, 1, 1, 1, 'rgba(105,209,227,1)')
@@ -174,27 +179,25 @@ stages.set(8, () => {
     inst.walls.push(new Ground(7, 7, 6, 1, 'rgba(2,138,12,1)'))
     inst.walls.push(new Ground(1, 12, 2, 1, 'rgba(2,138,12,1)'))
     inst.walls.push(new Ground(3, 13, 1, 1, 'rgba(2,138,12,1)'))
-    inst.walls.push(new Ground(4 , 12, 1, 1, 'rgba(2,138,12,1)'))
-    inst.walls.push(new Ground(5 , 13, 1, 1, 'rgba(2,138,12,1)'))
-    inst.walls.push(new Ground(6 , 14, 2, 1, 'rgba(2,138,12,1)'))
-    inst.walls.push(new Ground(8 , 13, 2, 1, 'rgba(2,138,12,1)'))
-    inst.walls.push(new Ground(10 , 12, 9, 1, 'rgba(2,138,12,1)'))
+    inst.walls.push(new Ground(4, 12, 1, 1, 'rgba(2,138,12,1)'))
+    inst.walls.push(new Ground(5, 13, 1, 1, 'rgba(2,138,12,1)'))
+    inst.walls.push(new Ground(6, 14, 2, 1, 'rgba(2,138,12,1)'))
+    inst.walls.push(new Ground(8, 13, 2, 1, 'rgba(2,138,12,1)'))
+    inst.walls.push(new Ground(10, 12, 9, 1, 'rgba(2,138,12,1)'))
     // boxes
-    inst.boxes.push(new Box(9, 5, 1, 1, 'rgba(183,113,28,1)'))
-    inst.boxes.push(new Barrel(9, 6, 1, 1, 'rgba(183,113,28,1)'))
-    inst.boxes.push(new Barrel(9, 4, 1, 1, 'rgba(183,113,28,1)'))
     inst.boxes.push(new Barrel(6, 0, 1, 1, 'rgba(183,113,28,1)'))
-
+    // inventory
+    inst.inventory.set('barrel', 2)
     // ladders
     inst.ladders.push(new Ladder(13, 7, 1, 5, 'rgba(225,225,224,1)'))
     // buttons
-    inst.buttons.push(new Button(7, 13, 1, 1, 'rgba(138,22,2,0.5)','blue'))
-    inst.buttons.push(new Button(14, 11, 1, 1, 'rgba(138,22,2,0.5)','yellow'))
-    inst.buttons.push(new Button(9, 12, 1, 1, 'rgba(138,22,2,0.5)','red'))
+    inst.buttons.push(new Button(7, 13, 1, 1, 'rgba(138,22,2,0.5)', 'blue'))
+    inst.buttons.push(new Button(14, 11, 1, 1, 'rgba(138,22,2,0.5)', 'yellow'))
+    inst.buttons.push(new Button(9, 12, 1, 1, 'rgba(138,22,2,0.5)', 'red'))
     //gate
-    inst.gates.push(new Gate(3, 12, 1, 1, 'rgb(138,22,2)','blue'))
-    inst.gates.push(new Gate(15, 11, 1, 1, 'rgb(132,127,26)','yellow'))
-    inst.gates.push(new Gate(6, 2, 1, 1, 'rgb(132,127,26)','red'))
+    inst.gates.push(new Gate(3, 12, 1, 1, 'rgb(138,22,2)', 'blue'))
+    inst.gates.push(new Gate(10, 11, 1, 1, 'rgb(132,127,26)', 'yellow'))
+    inst.gates.push(new Gate(6, 2, 1, 1, 'rgb(132,127,26)', 'red'))
 
     inst.player = new Player(13, 11, 1, 1, 'rgba(15,75,208,1)')
     inst.target = new Gold(1, 11, 1, 1, 'rgba(105,209,227,1)')

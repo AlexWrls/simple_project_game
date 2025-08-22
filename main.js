@@ -80,6 +80,7 @@ class MoveRect extends Rect {
 
 class Button extends MoveRect {
     imgStand;
+    imgPush;
     active;
     wasActive;
     type;
@@ -92,14 +93,12 @@ class Button extends MoveRect {
         this.active = false
         this.wasActive = false
         this.imgStand = new Image()
+        this.imgPush = new Image()
+        this.imgStand.src = `src/obj/gate/btn_${this.type}.png`
+        this.imgPush.src = `src/obj/gate/btn_${this.type}_push.png`
     }
 
     checkState() {
-        if (this.active) {
-            this.imgStand.src = `src/obj/gate/btn_${this.type}_push.png`
-        } else {
-            this.imgStand.src = `src/obj/gate/btn_${this.type}.png`
-        }
         if (this.active) {
             if (!this.wasActive) {
                 inst.audio.get('btn').play()
@@ -114,7 +113,7 @@ class Button extends MoveRect {
     }
 
     draw() {
-        ctx.drawImage(this.imgStand, this.x, this.y + 25, this.width, this.height)
+        ctx.drawImage(this.active ? this.imgPush : this.imgStand, this.x, this.y + 25, this.width, this.height)
     }
 }
 
@@ -181,8 +180,6 @@ class Gold extends MoveRect {
     }
 
     draw() {
-        // ctx.drawImage(this.imgStand, this.x + 20, this.y + 25, GRID_SIZE - 10, GRID_SIZE - 10)
-
         let frame = this.tick % 10;
         let xf = frame * 100;
         const srcWidth = 100;
@@ -229,7 +226,6 @@ class Ground extends MoveRect {
     }
 
     draw() {
-        //  масштаб по меньшей стороне
         ctx.drawImage(this.imgStand, this.x, this.y, this.width + 20, this.height + 20)
     }
 }

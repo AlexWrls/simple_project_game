@@ -40,5 +40,11 @@ function initSound() {
     fall.volume = 0.6
     map.set('fall', fall)
 
+    let newObj = new Audio();
+    newObj.src = 'src/sound/new_obj.mp3';
+    newObj.playbackRate = 1.5
+    newObj.volume = 0.6
+    map.set('newObj', newObj)
+
     inst.audio = map
 }

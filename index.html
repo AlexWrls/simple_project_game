@@ -53,6 +53,12 @@
     }
 
     const background = new Image();
+    const inventoryBox = new Image();
+    const inventoryBarrel = new Image();
+    const inventoryLadder = new Image();
+    inventoryBox.src = 'src/obj/box.png'
+    inventoryBarrel.src = 'src/obj/barrel.png'
+    inventoryLadder.src = `src/obj/ladder/1.png`
     background.src = 'src/cover.png'
     // background.onload = function background() {
     //     const scale = Math.min(canvas.width / background.width, canvas.height / background.height);
@@ -72,6 +78,10 @@
         inst.ladders = []
         inst.buttons = []
         inst.gates = []
+        inst.inventory = new Map()
+        inst.inventory.set('box', 0)
+        inst.inventory.set('barrel', 0)
+        inst.inventory.set('ladder', 0)
         stages.get(inst.stage)();
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.fillStyle = '#02850c';
@@ -186,7 +196,19 @@
         // ctx.fillText(`Steps: ${inst.player.steps}`, 10, 20);
         ctx.fillText(`Для начала уровня заново жми 'Enter'`, 10, 20);
         ctx.fillText(`Переключение уровней 'Z'- назад, 'X' - вперед`, 10, 40);
-
+        ctx.fillStyle = '#2f3136';
+        ctx.fillRect(baseWidth - (GRID_SIZE * 3) - 20, 0, GRID_SIZE * 4, GRID_SIZE * 1.5);
+        ctx.fillStyle = '#fff';
+        ctx.font = '15px Calibri';
+        ctx.fillText(`Жми '3'`, GRID_SIZE * 19, GRID_SIZE * 0.3);
+        ctx.fillText(`${inst.inventory.get('ladder')}`, GRID_SIZE * 19 + 14, GRID_SIZE * 1.4);
+        ctx.drawImage(inventoryLadder, baseWidth - GRID_SIZE, 30, 40, 40)
+        ctx.fillText(`Жми '2'`, GRID_SIZE * 18, GRID_SIZE * 0.3);
+        ctx.fillText(`${inst.inventory.get('barrel')}`, GRID_SIZE * 18 + 14, GRID_SIZE * 1.4);
+        ctx.drawImage(inventoryBarrel, baseWidth - GRID_SIZE * 2, 30, 40, 40)
+        ctx.fillText(`Жми '1'`, GRID_SIZE * 17, GRID_SIZE * 0.3);
+        ctx.fillText(`${inst.inventory.get('box')}`, GRID_SIZE * 17 + 14, GRID_SIZE * 1.4);
+        ctx.drawImage(inventoryBox, baseWidth - GRID_SIZE * 3, 30, 40, 40)
         inst.lastTime = timestamp;
         //Проверка прохождения
         if (inst.player.x === inst.target.x && inst.player.y === inst.target.y) {
@@ -223,7 +245,23 @@
         if (inst.player.isMoving || inst.player.gravity) {
             return;
         }
-
+        // Создание объектов из инвентаря
+        if (key === '1' || key === '2' || key === '3') {
+            const obj = key === '1' ? 'box' : key === '2' ? 'barrel' : 'ladder'
+            let count = inst.inventory.get(obj)
+            if (inst.inventory.get(obj) !== 0) {
+                if (key === '1' || key === '2') {
+                    inst.boxes.push(key === '1'
+                        ? new Box(inst.player.x / GRID_SIZE, inst.player.y / GRID_SIZE, 1, 1, 'rgba(183,113,28,1)')
+                        : new Barrel(inst.player.x / GRID_SIZE, inst.player.y / GRID_SIZE, 1, 1, 'rgba(183,113,28,1)')
+                    )
+                } else if (key === '3') {
+                    inst.ladders.push(new Ladder(inst.player.x / GRID_SIZE, inst.player.y / GRID_SIZE, 1, 1, 'rgba(183,113,28,1)'))
+                }
+                inst.inventory.set(obj, --count)
+                inst.audio.get('newObj').play();
+            }
+        }
         inst.eventKey = key;
         inst.keys = key;
 
@@ -287,6 +325,7 @@
         canvas.style.height = `${baseHeight * scale}px`;
         preview()
     }
+
     window.addEventListener('load', resizeCanvas);
     window.addEventListener('resize', resizeCanvas);
 
