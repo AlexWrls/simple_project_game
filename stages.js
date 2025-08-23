@@ -5,9 +5,7 @@ stages.set(1, () => {
     // walls
     inst.walls.push(new Ground(3, 8, 8, 1, 'rgba(2,138,12,1)'))
     // inventory
-    inst.inventory.set('box', 5)
-    inst.inventory.set('barrel', 5)
-    inst.inventory.set('ladder', 5)
+    inst.inventory = new Inventory(5, 5, 5)
 
     inst.player = new Player(3, 7, 1, 1, 'rgba(15,75,208,1)')
     inst.target = new Gold(10, 7, 1, 1, 'rgba(105,209,227,1)')
@@ -160,7 +158,7 @@ stages.set(7, () => {
 
     inst.boxes.push(new Barrel(4, 1, 1, 1, 'rgba(183,113,28,1)'))
     // inventory
-    inst.inventory.set('box', 1)
+    inst.inventory = new Inventory(1, 0, 0)
 
     // buttons
     inst.buttons.push(new Button(1, 9, 1, 1, 'rgba(138,22,2,0.5)', 'blue'))
@@ -187,7 +185,7 @@ stages.set(8, () => {
     // boxes
     inst.boxes.push(new Barrel(6, 0, 1, 1, 'rgba(183,113,28,1)'))
     // inventory
-    inst.inventory.set('barrel', 2)
+    inst.inventory = new Inventory(0, 2, 0)
     // ladders
     inst.ladders.push(new Ladder(13, 7, 1, 5, 'rgba(225,225,224,1)'))
     // buttons

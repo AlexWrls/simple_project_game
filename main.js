@@ -306,6 +306,71 @@ class Box extends MoveRect {
     }
 }
 
+class Inventory {
+
+    bucket;
+    mediatorBucket;
+    imgBox;
+    imgBarrel;
+    imgLadder;
+    box = 'box'
+    barrel = 'barrel'
+    ladder = 'ladder'
+
+    constructor(boxCount, barrelCount, ladderCount) {
+        this.imgBox = new Image();
+        this.imgBarrel = new Image();
+        this.imgLadder = new Image();
+        this.imgBox.src = 'src/obj/box.png'
+        this.imgBarrel.src = 'src/obj/barrel.png'
+        this.imgLadder.src = `src/obj/ladder/1.png`
+        this.bucket = new Map()
+        this.bucket.set(this.box, boxCount)
+        this.bucket.set(this.barrel, barrelCount)
+        this.bucket.set(this.ladder, ladderCount)
+        this.mediatorBucket = new Map();
+        this.mediatorBucket.set('1', this.box)
+        this.mediatorBucket.set('2', this.barrel)
+        this.mediatorBucket.set('3', this.ladder)
+    }
+
+
+// Создание объектов из инвентаря
+    handleCreate(key) {
+        if (key === '1' || key === '2' || key === '3') {
+            const obj = this.mediatorBucket.get(key)
+            let count = this.bucket.get(obj)
+            if (this.bucket.get(obj) !== 0) {
+                if (obj === this.box) {
+                    inst.boxes.push(new Box(inst.player.x / GRID_SIZE, inst.player.y / GRID_SIZE, 1, 1, 'rgba(183,113,28,1)'))
+                } else if (obj === this.barrel) {
+                    inst.boxes.push(new Barrel(inst.player.x / GRID_SIZE, inst.player.y / GRID_SIZE, 1, 1, 'rgba(183,113,28,1)'))
+                } else if (obj === this.ladder) {
+                    inst.ladders.push(new Ladder(inst.player.x / GRID_SIZE, inst.player.y / GRID_SIZE, 1, 1, 'rgba(183,113,28,1)'))
+                }
+                this.bucket.set(obj, --count)
+                inst.audio.get('newObj').play();
+            }
+        }
+    }
+
+    draw() {
+        ctx.fillStyle = '#2f3136';
+        ctx.fillRect(baseWidth - (GRID_SIZE * 3) - 20, 0, GRID_SIZE * 4, GRID_SIZE * 1.5);
+        ctx.fillStyle = '#fff';
+        ctx.font = '15px Calibri';
+        ctx.fillText(`Жми '3'`, GRID_SIZE * 19, GRID_SIZE * 0.3);
+        ctx.fillText(`${this.bucket.get('ladder')}`, GRID_SIZE * 19 + 14, GRID_SIZE * 1.4);
+        ctx.drawImage(this.imgLadder, baseWidth - GRID_SIZE, 30, 40, 40)
+        ctx.fillText(`Жми '2'`, GRID_SIZE * 18, GRID_SIZE * 0.3);
+        ctx.fillText(`${this.bucket.get('barrel')}`, GRID_SIZE * 18 + 14, GRID_SIZE * 1.4);
+        ctx.drawImage(this.imgBarrel, baseWidth - GRID_SIZE * 2, 30, 40, 40)
+        ctx.fillText(`Жми '1'`, GRID_SIZE * 17, GRID_SIZE * 0.3);
+        ctx.fillText(`${this.bucket.get('box')}`, GRID_SIZE * 17 + 14, GRID_SIZE * 1.4);
+        ctx.drawImage(this.imgBox, baseWidth - GRID_SIZE * 3, 30, 40, 40)
+    }
+}
+
 class Player extends MoveRect {
 
     imgLeft;
