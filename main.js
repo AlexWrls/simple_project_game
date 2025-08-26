@@ -8,7 +8,6 @@ class Rect {
 
     constructor(x, y, width, height, color) {
         this.id = Math.round(Math.random() * Math.pow(50, 10));
-        console.log(this.id)
         this.x = x * GRID_SIZE;
         this.y = y * GRID_SIZE;
         this.width = width * GRID_SIZE;
@@ -25,6 +24,7 @@ class MoveRect extends Rect {
     steps;
     moveSpeed;
     isFalling;
+    direction;
     onLadder;
 
 
@@ -36,6 +36,7 @@ class MoveRect extends Rect {
         this.steps = 100000;
         this.moveSpeed = 1;
         this.isFalling = false;
+        this.direction = 0;
         this.onLadder = false;
     }
 
@@ -234,13 +235,11 @@ class Barrel extends MoveRect {
     imgStand;
     imgMove;
     zIndex;
-    direction;
     tick;
 
     constructor(x, y, width, height, color) {
         super(x, y, width, height, color);
         this.zIndex = 2
-        this.direction = 0
         this.imgStand = new Image()
         this.imgMove = new Image()
         this.imgStand.src = 'src/obj/barrel.png'
@@ -284,6 +283,54 @@ class Barrel extends MoveRect {
                 Math.floor(scaledWidth + 35), Math.floor(scaledHeight + 35),  // конечные координаты (x,y,w,h)
             );
         }
+    }
+}
+
+class Portal extends MoveRect {
+
+    imgMove;
+    type;
+    isLock;
+    zIndex;
+    tick;
+
+    constructor(x, y, width, height, color, type) {
+        super(x, y, width, height, color);
+        this.imgMove = new Image()
+        // TODO нарисовать порталы
+        this.imgMove.src = `src/obj/portal/blue.png`;
+        this.type = type
+        this.zIndex = -99;
+        this.isLock = false;
+        this.tick = 0;
+        setInterval(() => {
+            this.tick++
+            if (this.tick >= 4) {
+                this.tick = 0
+            }
+        }, 120)
+    }
+
+    draw() {
+        let frame = this.tick % 10;
+        let xf = frame * 100;
+        const srcWidth = 100;
+        const srcHeight = 100;
+        //  масштаб по меньшей стороне
+        const scale = Math.min(GRID_SIZE / srcWidth, GRID_SIZE / srcHeight);
+        const scaledWidth = srcWidth * scale;
+        const scaledHeight = srcHeight * scale;
+
+        ctx.drawImage(
+            this.imgMove,        // изображение спрайт-листа
+            Math.floor(xf), 0, Math.floor(srcWidth - GRID_SIZE / 2), Math.floor(srcHeight),  // исходные координаты (x,y,w,h)
+            Math.floor(this.x - GRID_SIZE / 2), Math.floor(this.y - GRID_SIZE / 1.5),
+            Math.floor(scaledWidth + GRID_SIZE), Math.floor(scaledHeight + GRID_SIZE),  // конечные координаты (x,y,w,h)
+        );
+    }
+
+    getAnotherPortal() {
+        return inst.portals.filter(p => p.type === this.type && p.id !== this.id).pop();
     }
 }
 
@@ -432,7 +479,12 @@ class Player extends MoveRect {
         const right = inst.keys === 'ArrowRight'
         const up = inst.keys === 'ArrowUp'
         const down = inst.keys === 'ArrowDown'
+        // определение направления движения
+        if (Math.abs(inst.player.x - inst.player.targetX) > 20) {
+            inst.player.direction = inst.player.x - inst.player.targetX > 0 ? 'ArrowLeft' : 'ArrowRight';
+        }
         if (!this.isMoving && !left && !right && !up && !down) {
+            inst.player.direction = 'stop'
             inst.audio.get('step').pause()
             ctx.drawImage(this.imgStand, this.x + offsetX, this.y + offsetY, scaledWidth + 5, scaledHeight + 5)
         } else {
@@ -448,7 +500,7 @@ class Player extends MoveRect {
                 imgRight = this.isPush ? this.imgRightPush : this.imgRight
             }
             ctx.drawImage(
-                left ? imgLeft : imgRight,        // изображение спрайт-листа
+                left || inst.player.x - inst.player.targetX > 0 ? imgLeft : imgRight,        // изображение спрайт-листа
                 Math.floor(xf), 0, Math.floor(srcWidth), Math.floor(srcHeight),  // исходные координаты (x,y,w,h)
                 Math.floor(this.x + offsetX), Math.floor(this.y + offsetY),
                 Math.floor(scaledWidth), Math.floor(scaledHeight),  // конечные координаты (x,y,w,h)

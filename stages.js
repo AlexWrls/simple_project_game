@@ -201,8 +201,60 @@ stages.set(8, () => {
     inst.target = new Gold(1, 11, 1, 1, 'rgba(105,209,227,1)')
 });
 
-// Последний уровень
+// Девятый уровень
 stages.set(9, () => {
+    // walls
+    inst.walls.push(new Ground(3, 8, 5, 1, 'rgba(2,138,12,1)'))
+    inst.walls.push(new Ground(10, 8, 5, 1, 'rgba(2,138,12,1)'))
+    //portals
+    inst.portals.push(new Portal(10,7,1,1,'#69d1e3','blue'))
+    inst.portals.push(new Portal(7,7,1,1,'#69d1e3','blue'))
+
+    inst.player = new Player(13, 7, 1, 1, 'rgba(15,75,208,1)')
+    inst.target = new Gold(3, 7, 1, 1, 'rgba(105,209,227,1)')
+});
+
+// Десятый уровень
+stages.set(10, () => {
+    // walls
+    inst.walls.push(new Ground(1, 8, 8, 1, 'rgba(2,138,12,1)'))
+    inst.walls.push(new Ground(10, 8, 3, 1, 'rgba(2,138,12,1)'))
+    inst.walls.push(new Ground(13, 9, 4, 1, 'rgba(2,138,12,1)'))
+    inst.walls.push(new Ground(17, 8, 1, 1, 'rgba(2,138,12,1)'))
+
+    inst.walls.push(new Ground(4, 5, 5, 1, 'rgba(2,138,12,1)'))
+    inst.walls.push(new Ground(10, 5, 3, 1, 'rgba(2,138,12,1)'))
+
+    inst.walls.push(new Ground(2, 12, 11, 1, 'rgba(2,138,12,1)'))
+
+    // boxes
+    inst.boxes.push(new Barrel(12, 4, 1, 1, 'rgba(183,113,28,1)'))
+    inst.boxes.push(new Barrel(7, 7, 1, 1, 'rgba(183,113,28,1)'))
+    inst.boxes.push(new Box(8, 4, 1, 1, 'rgba(183,113,28,1)'))
+    inst.boxes.push(new Box(8, 10, 1, 1, 'rgba(183,113,28,1)'))
+    inst.boxes.push(new Box(8, 11, 1, 1, 'rgba(183,113,28,1)'))
+
+    // ladders
+    inst.ladders.push(new Ladder(9, 4, 1, 8, 'rgba(225,225,224,1)'))
+    // buttons
+    inst.buttons.push(new Button(5, 11, 1, 1, 'rgba(138,22,2,0.5)', 'red'))
+    inst.buttons.push(new Button(3, 7, 1, 1, 'rgba(138,22,2,0.5)', 'red'))
+      //gate
+    inst.gates.push(new Gate(3, 11, 1, 1, 'rgb(132,127,26)', 'red'))
+
+    //portals
+    inst.portals.push(new Portal(1,7,1,1,'#69d1e3','blue'))
+    inst.portals.push(new Portal(17,7,1,1,'#69d1e3','blue'))
+
+    inst.portals.push(new Portal(12,11,1,1,'#69d1e3','red'))
+    inst.portals.push(new Portal(5,4,1,1,'#69d1e3','red'))
+
+    inst.player = new Player(11, 7, 1, 1, 'rgba(15,75,208,1)')
+    inst.target = new Gold(2, 11, 1, 1, 'rgba(105,209,227,1)')
+});
+
+// Последний уровень
+stages.set(11, () => {
     // walls
     inst.walls.push(new Ground(1, 10, 15, 1, 'rgba(2,138,12,1)'))
 

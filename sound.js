@@ -46,5 +46,11 @@ function initSound() {
     newObj.volume = 0.6
     map.set('newObj', newObj)
 
+    let portal = new Audio();
+    portal.src = 'src/sound/portal.mp3';
+    portal.playbackRate = 1.5
+    portal.volume = 0.8
+    map.set('portal', portal)
+
     inst.audio = map
 }
