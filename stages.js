@@ -237,8 +237,8 @@ stages.set(10, () => {
     // ladders
     inst.ladders.push(new Ladder(9, 4, 1, 8, 'rgba(225,225,224,1)'))
     // buttons
-    inst.buttons.push(new Button(5, 11, 1, 1, 'rgba(138,22,2,0.5)', 'red'))
-    inst.buttons.push(new Button(3, 7, 1, 1, 'rgba(138,22,2,0.5)', 'red'))
+    inst.buttons.push(new Button(6, 11, 1, 1, 'rgba(138,22,2,0.5)', 'red'))
+    inst.buttons.push(new Button(4, 7, 1, 1, 'rgba(138,22,2,0.5)', 'red'))
       //gate
     inst.gates.push(new Gate(3, 11, 1, 1, 'rgb(132,127,26)', 'red'))
 
