@@ -1,14 +1,6 @@
 function initSound() {
     let map = new Map()
 
-    let backSound = new Audio();
-    backSound.src = 'src/sound/back_sound.mp3';
-    backSound.volume = 0.4
-    backSound.loop = true;
-    if (!game_debug){
-        map.set('back', backSound)
-    }
-
     let stepSound = new Audio();
     stepSound.src = 'src/sound/step.mp3';
     stepSound.playbackRate = 1.5
@@ -51,6 +43,12 @@ function initSound() {
     portal.playbackRate = 1.5
     portal.volume = 0.8
     map.set('portal', portal)
+
+    let newLevel = new Audio();
+    newLevel.src = 'src/sound/new_level.mp3';
+    newLevel.playbackRate = 1
+    newLevel.volume = 0.4
+    map.set('newLevel', newLevel)
 
     inst.audio = map
 }

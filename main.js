@@ -405,14 +405,14 @@ class Inventory {
         ctx.fillStyle = '#2f3136';
         ctx.fillRect(baseWidth - (GRID_SIZE * 3) - 20, 0, GRID_SIZE * 4, GRID_SIZE * 1.5);
         ctx.fillStyle = '#fff';
-        ctx.font = '15px Calibri';
-        ctx.fillText(`Жми '3'`, GRID_SIZE * 19, GRID_SIZE * 0.3);
+        ctx.font = '20px Calibri';
+        ctx.fillText(`Кл '3'`, GRID_SIZE * 19 , GRID_SIZE * 0.3);
         ctx.fillText(`${this.bucket.get('ladder')}`, GRID_SIZE * 19 + 14, GRID_SIZE * 1.4);
         ctx.drawImage(this.imgLadder, baseWidth - GRID_SIZE, 30, 40, 40)
-        ctx.fillText(`Жми '2'`, GRID_SIZE * 18, GRID_SIZE * 0.3);
+        ctx.fillText(`Кл '2'`, GRID_SIZE * 18, GRID_SIZE * 0.3);
         ctx.fillText(`${this.bucket.get('barrel')}`, GRID_SIZE * 18 + 14, GRID_SIZE * 1.4);
         ctx.drawImage(this.imgBarrel, baseWidth - GRID_SIZE * 2, 30, 40, 40)
-        ctx.fillText(`Жми '1'`, GRID_SIZE * 17, GRID_SIZE * 0.3);
+        ctx.fillText(`Кл '1'`, GRID_SIZE * 17, GRID_SIZE * 0.3);
         ctx.fillText(`${this.bucket.get('box')}`, GRID_SIZE * 17 + 14, GRID_SIZE * 1.4);
         ctx.drawImage(this.imgBox, baseWidth - GRID_SIZE * 3, 30, 40, 40)
     }

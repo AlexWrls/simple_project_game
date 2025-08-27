@@ -90,16 +90,13 @@
         }
         ctx.font = '30px Calibri';
         ctx.fillStyle = '#69d1e3';
-        ctx.fillText(`Для начала уровня заново жми 'Enter'`, 100, 650);
+        ctx.fillText(`Для начала уровня заново жми 'Enter' или 'Space'`, 100, 650);
         ctx.fillText(`Переключение уровней: клавиша 'Z'- назад, клавиша 'X' - вперед`, 100, 700);
     }
 
     function initial() {
         preview()
-        try {
-            inst.audio.get('back').play()
-        } catch (e) {
-        }
+        inst.audio.get('step').loop = true;
         inst.time = setInterval(() => {
             main()
         }, 8)
@@ -179,10 +176,12 @@
                         obj.direction = 0
                         obj.x = objX
                         obj.targetX = portal.x - dirX
-                        obj.y = obj.targetY= objY
-                        inst.player.targetX = inst.player.targetX - dirX;
-                        inst.player.isPush = false;
-                        inst.player.isMoving = true;
+                        obj.y = obj.targetY = objY
+                        if (obj.collision(obj.targetX, obj.y, [inst.player])) {
+                            inst.player.targetX = inst.player.targetX - dirX;
+                            inst.player.isPush = false;
+                            inst.player.isMoving = true;
+                        }
                     }
                 }
             }
@@ -195,7 +194,7 @@
         //-------------------
 
         if (game_debug) {
-            for (const obj of [...inst.walls, ...inst.ladders, ...inst.boxes, ...inst.buttons, inst.target, inst.player]) {
+            for (const obj of [...inst.portals, ...inst.walls, ...inst.ladders, ...inst.boxes, ...inst.buttons, inst.target, inst.player]) {
                 ctx.fillStyle = obj.color;
                 ctx.fillRect(obj.x, obj.y, obj.width, obj.height);
                 ctx.fillText(`${obj.id}`, obj.x, obj.y);
@@ -229,6 +228,8 @@
         inst.lastTime = timestamp;
         //Проверка прохождения
         if (inst.player.x === inst.target.x && inst.player.y === inst.target.y) {
+            inst.audio.get('step').loop = false;
+            inst.audio.get('newLevel').play()
             inst.stage++
             preview()
         }
@@ -246,14 +247,14 @@
     };
 
     const handlePlayerInput = (key) => {
-        if (key === 'Enter') {
+        if (key === 'Enter' || key === ' ') {
             initial();
         }
-        if (key === 'z') {
+        if (key === 'z' || key === 'я') {
             if (inst.stage > 1) inst.stage--;
             preview();
         }
-        if (key === 'x') {
+        if (key === 'x' || key === 'ч') {
             if (inst.stage < 11) inst.stage++;
             preview();
         }
