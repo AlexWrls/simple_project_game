@@ -163,21 +163,26 @@
                     inst.player.targetX = portal.x - dirX;
                     inst.player.y = inst.player.targetY = portal.y;
                     inst.player.isPush = false;
+                    inst.player.isMoving = true;
                 }
             }
             for (const obj of [...inst.boxes]) {
                 const dirX = obj.x - inst.player.targetX > 1 ? GRID_SIZE : -GRID_SIZE;
                 if (!obj.isMoving && portal.collision(portal.x, portal.y, [obj])) {
                     inst.audio.get('portal').play()
-                    if (!obj.collision(outPortal.x + dirX, obj.y, [...inst.boxes])) {
-                        obj.x = outPortal.x
-                        obj.targetX = outPortal.x + dirX
-                        obj.y = obj.targetY = outPortal.y;
-                    } else {
+                    const objX = obj.x
+                    const objY = obj.y
+                    obj.x = outPortal.x
+                    obj.targetX = outPortal.x + dirX
+                    obj.y = obj.targetY = outPortal.y;
+                    if (obj.collision(obj.targetX, obj.y, [...inst.boxes])) {
                         obj.direction = 0
-                        obj.x = portal.x
+                        obj.x = objX
                         obj.targetX = portal.x - dirX
-                        obj.y = obj.targetY = portal.y;
+                        obj.y = obj.targetY= objY
+                        inst.player.targetX = inst.player.targetX - dirX;
+                        inst.player.isPush = false;
+                        inst.player.isMoving = true;
                     }
                 }
             }
