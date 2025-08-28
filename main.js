@@ -324,7 +324,7 @@ class Portal extends MoveRect {
         ctx.drawImage(
             this.imgMove,        // изображение спрайт-листа
             Math.floor(xf), 0, Math.floor(srcWidth - GRID_SIZE / 2), Math.floor(srcHeight),  // исходные координаты (x,y,w,h)
-            Math.floor(this.x - GRID_SIZE / 2), Math.floor(this.y - GRID_SIZE / 1.5),
+            Math.floor(this.x - GRID_SIZE / 1.2), Math.floor(this.y - GRID_SIZE / 1.5),
             Math.floor(scaledWidth + GRID_SIZE), Math.floor(scaledHeight + GRID_SIZE),  // конечные координаты (x,y,w,h)
         );
     }
