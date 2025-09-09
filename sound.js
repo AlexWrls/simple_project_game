@@ -50,5 +50,17 @@ function initSound() {
     newLevel.volume = 0.4
     map.set('newLevel', newLevel)
 
+    let bang = new Audio();
+    bang.src = 'src/sound/bang.mp3';
+    bang.playbackRate = 1
+    bang.volume = 0.8
+    map.set('bang', bang)
+
+    let shot = new Audio();
+    shot.src = 'src/sound/fire.mp3';
+    shot.playbackRate = 1
+    shot.volume = 0.6
+    map.set('shot', shot)
+
     inst.audio = map
 }

@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Project3</title>
     <script th:src="@{main.js}" src="main.js"></script>
+    <script th:src="@{preview.js}" src="preview.js"></script>
     <script th:src="@{sound.js}" src="sound.js"></script>
     <script th:src="@{stages.js}" src="stages.js"></script>
     <style>
@@ -38,6 +39,7 @@
     const game_debug = false
     const inst = {
         stage: 1,
+        stageDescription: '',
         time: {},
         fps: 0,
         player: {},
@@ -47,6 +49,7 @@
         buttons: [],
         gates: [],
         portals: [],
+        guns: [],
         target: {},
         keys: {},
         eventKey: {},
@@ -55,6 +58,9 @@
 
     const background = new Image();
     background.src = 'src/cover.png'
+
+    const cat = new Image();
+    cat.src = 'src/player/cat-stand.png'
     // background.onload = function background() {
     //     const scale = Math.min(canvas.width / background.width, canvas.height / background.height);
     //     const width = background.width * scale;
@@ -63,7 +69,7 @@
     // }
 
 
-    function preview() {
+    function preview(step) {
         clearInterval(inst.time)
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         inst.player = null
@@ -74,24 +80,25 @@
         inst.buttons = []
         inst.gates = []
         inst.portals = []
-        inst.inventory = new Inventory(0, 0, 0)
+        inst.guns = []
+        inst.inventory = new Inventory(0, 0, 0, 0)
         stages.get(inst.stage)();
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.fillStyle = '#02850c';
         ctx.font = '40px Calibri';
         ctx.fillText(`Уровень ${inst.stage}`, 100, 300);
         ctx.fillStyle = '#caccc1';
-        if (inst.stage === 1) {
-            ctx.font = '30px Calibri';
-            ctx.fillText("Помоги коту заполучить заветную монетку ", 200, 400);
-        } else {
-            ctx.font = '50px Calibri';
-            ctx.fillText("Супер!", 400, 400);
-        }
+        ctx.font = '30px Calibri';
+        // ctx.fillText(`== ${inst.stageDescription} ==`, 400 - (inst.stageDescription.length*3), 400);
         ctx.font = '30px Calibri';
         ctx.fillStyle = '#69d1e3';
-        ctx.fillText(`Для начала уровня заново жми 'Enter' или 'Space'`, 100, 650);
+        ctx.fillText(`Для начала уровня жми 'Enter' или 'Space'`, 100, 650);
         ctx.fillText(`Переключение уровней: клавиша 'Z'- назад, клавиша 'X' - вперед`, 100, 700);
+        ctx.drawImage(cat, 350, 500, 92, 110)
+        drawSpeechBubble(ctx, 150, 350, 800, 110, 250, 500, inst.stageDescription);
+        if (step !== undefined) {
+            ctx.fillText(`Уровень ${inst.stage - 1} пройден за ${step} шагов`, 100, 100);
+        }
     }
 
     function initial() {
@@ -149,6 +156,11 @@
                 inst.walls = inst.walls.filter(wall => !wall.open)
             }
         }
+        //------ /Выстрелы -------------
+        for (const gun of [...inst.guns]) {
+            gun.checkState()
+            gun.move()
+        }
         //------ Порталы/ -------------
         for (const portal of [...inst.portals]) {
             const outPortal = portal.getAnotherPortal();
@@ -185,6 +197,15 @@
                     }
                 }
             }
+            for (const obj of [...inst.guns]) {
+                const dirX = obj.x - inst.player.targetX > 1 ? GRID_SIZE : -GRID_SIZE;
+                if (portal.collision(portal.x, portal.y, [obj])) {
+                    inst.audio.get('portal').play()
+                    obj.x = outPortal.x + dirX
+                    obj.targetX = outPortal.x + dirX
+                    obj.y = obj.targetY = outPortal.y;
+                }
+            }
         }
 
         //------ Кнопки - Ворота/ -------------
@@ -194,7 +215,7 @@
         //-------------------
 
         if (game_debug) {
-            for (const obj of [...inst.portals, ...inst.walls, ...inst.ladders, ...inst.boxes, ...inst.buttons, inst.target, inst.player]) {
+            for (const obj of [...inst.guns, ...inst.portals, ...inst.walls, ...inst.ladders, ...inst.boxes, ...inst.buttons, inst.target, inst.player]) {
                 ctx.fillStyle = obj.color;
                 ctx.fillRect(obj.x, obj.y, obj.width, obj.height);
                 ctx.fillText(`${obj.id}`, obj.x, obj.y);
@@ -212,7 +233,7 @@
             const drawObj = [...inst.portals, inst.target, ...inst.walls, ...inst.boxes, ...inst.gates, ...inst.buttons]
                 .sort((a, b) => a.targetX - b.targetX || b.targetY - a.targetY || b.zIndex - a.zIndex)
             // drawObj.forEach(i=>console.log(i.x))
-            for (const obj of [...inst.ladders, ...drawObj]) {
+            for (const obj of [...inst.ladders, ...drawObj, ...inst.guns]) {
                 obj.draw()
             }
             inst.player.draw()
@@ -224,6 +245,7 @@
         // ctx.fillText(`Steps: ${inst.player.steps}`, 10, 20);
         ctx.fillText(`Для начала уровня заново жми 'Enter'`, 10, 20);
         ctx.fillText(`Переключение уровней 'Z'- назад, 'X' - вперед`, 10, 40);
+        ctx.fillText(`Шаги: ${Math.round(inst.player.steps / GRID_SIZE)}`, 10, 60);
         inst.inventory.draw()
         inst.lastTime = timestamp;
         //Проверка прохождения
@@ -231,7 +253,7 @@
             inst.audio.get('step').loop = false;
             inst.audio.get('newLevel').play()
             inst.stage++
-            preview()
+            preview(Math.round(inst.player.steps / GRID_SIZE))
         }
     }
 
@@ -255,7 +277,7 @@
             preview();
         }
         if (key === 'x' || key === 'ч') {
-            if (inst.stage < 11) inst.stage++;
+            if (inst.stage < 12) inst.stage++;
             preview();
         }
 

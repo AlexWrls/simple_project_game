@@ -2,16 +2,18 @@ const stages = new Map();
 
 // Первй уровень
 stages.set(1, () => {
+    inst.stageDescription = 'Это просто, пройдусь по прямой до монетки'
     // walls
     inst.walls.push(new Ground(3, 8, 8, 1, 'rgba(2,138,12,1)'))
     // inventory
-    inst.inventory = new Inventory(5, 5, 5)
+    inst.inventory = new Inventory(5, 5, 5, 5)
 
     inst.player = new Player(3, 7, 1, 1, 'rgba(15,75,208,1)')
     inst.target = new Gold(10, 7, 1, 1, 'rgba(105,209,227,1)')
 });
 // Второй уровень
 stages.set(2, () => {
+    inst.stageDescription = 'Хмм, одного ящика мне будет не достаточно\n чтобы пробраться через канаву'
     // walls
     inst.walls.push(new Ground(1, 8, 4, 1, 'rgba(2,138,12,1)'))
     inst.walls.push(new Ground(6, 8, 5, 1, 'rgba(2,138,12,1)'))
@@ -37,6 +39,7 @@ stages.set(2, () => {
 
 // Третий уровень
 stages.set(3, () => {
+    inst.stageDescription = 'Эти ящики, они мешают или помогают...'
     // walls
     inst.walls.push(new Ground(2, 8, 10, 1, 'rgba(2,138,12,1)'))
     inst.walls.push(new Ground(4, 4, 2, 1, 'rgba(2,138,12,1)'))
@@ -56,6 +59,7 @@ stages.set(3, () => {
 
 // Четвертый уровень
 stages.set(4, () => {
+    inst.stageDescription = 'Главное не торопиться'
     // walls
     inst.walls.push(new Ground(6, 3, 5, 1, 'rgba(2,138,12,1)'))
     inst.walls.push(new Ground(2, 5, 13, 1, 'rgba(2,138,12,1)'))
@@ -86,6 +90,7 @@ stages.set(4, () => {
 
 // Пятый уровень
 stages.set(5, () => {
+    inst.stageDescription = 'Интересно, что если нажать на эту синюю кнопку...'
     // walls
     inst.walls.push(new Ground(1, 8, 15, 1, 'rgba(2,138,12,1)'))
     // ladders
@@ -104,6 +109,7 @@ stages.set(5, () => {
 
 // Шестой уровень
 stages.set(6, () => {
+    inst.stageDescription = 'Опять ворота, всех растопчу!!!'
     // walls
     inst.walls.push(new Ground(1, 10, 13, 1, 'rgba(2,138,12,1)'))
     inst.walls.push(new Ground(14, 11, 1, 1, 'rgba(2,138,12,1)'))
@@ -134,6 +140,7 @@ stages.set(6, () => {
 
 // Седьмой уровень
 stages.set(7, () => {
+    inst.stageDescription = 'Хмм, кажется у меня в инвентаре что-то было\n (клавиши 1,2,3,4)'
     // walls
     inst.walls.push(new Ground(1, 10, 6, 1, 'rgba(2,138,12,1)'))
     inst.walls.push(new Ground(9, 10, 5, 1, 'rgba(2,138,12,1)'))
@@ -158,7 +165,7 @@ stages.set(7, () => {
 
     inst.boxes.push(new Barrel(4, 1, 1, 1, 'rgba(183,113,28,1)'))
     // inventory
-    inst.inventory = new Inventory(1, 0, 0)
+    inst.inventory = new Inventory(1, 0, 0, 0)
 
     // buttons
     inst.buttons.push(new Button(1, 9, 1, 1, 'rgba(138,22,2,0.5)', 'blue'))
@@ -173,6 +180,7 @@ stages.set(7, () => {
 
 // Восьмой уровень
 stages.set(8, () => {
+    inst.stageDescription = 'Ээх закачу-прокачу!!!'
     // walls
     inst.walls.push(new Ground(7, 7, 6, 1, 'rgba(2,138,12,1)'))
     inst.walls.push(new Ground(1, 12, 2, 1, 'rgba(2,138,12,1)'))
@@ -185,7 +193,7 @@ stages.set(8, () => {
     // boxes
     inst.boxes.push(new Barrel(6, 0, 1, 1, 'rgba(183,113,28,1)'))
     // inventory
-    inst.inventory = new Inventory(0, 2, 0)
+    inst.inventory = new Inventory(0, 2, 0, 0)
     // ladders
     inst.ladders.push(new Ladder(13, 7, 1, 5, 'rgba(225,225,224,1)'))
     // buttons
@@ -203,12 +211,13 @@ stages.set(8, () => {
 
 // Девятый уровень
 stages.set(9, () => {
+    inst.stageDescription = 'Похоже на портал, пройду через него....'
     // walls
     inst.walls.push(new Ground(3, 8, 5, 1, 'rgba(2,138,12,1)'))
     inst.walls.push(new Ground(10, 8, 5, 1, 'rgba(2,138,12,1)'))
     //portals
-    inst.portals.push(new Portal(10,7,1,1,'#69d1e3','blue'))
-    inst.portals.push(new Portal(7,7,1,1,'#69d1e3','blue'))
+    inst.portals.push(new Portal(10, 7, 1, 1, '#69d1e3', 'blue'))
+    inst.portals.push(new Portal(7, 7, 1, 1, '#69d1e3', 'blue'))
 
     inst.player = new Player(13, 7, 1, 1, 'rgba(15,75,208,1)')
     inst.target = new Gold(3, 7, 1, 1, 'rgba(105,209,227,1)')
@@ -216,6 +225,7 @@ stages.set(9, () => {
 
 // Десятый уровень
 stages.set(10, () => {
+    inst.stageDescription = 'Хмм ... как же принести ящики наверх,\nвозможно порталы помогут'
     // walls
     inst.walls.push(new Ground(1, 8, 8, 1, 'rgba(2,138,12,1)'))
     inst.walls.push(new Ground(10, 8, 3, 1, 'rgba(2,138,12,1)'))
@@ -239,23 +249,64 @@ stages.set(10, () => {
     // buttons
     inst.buttons.push(new Button(5, 11, 1, 1, 'rgba(138,22,2,0.5)', 'red'))
     inst.buttons.push(new Button(4, 7, 1, 1, 'rgba(138,22,2,0.5)', 'red'))
-      //gate
+    //gate
     inst.gates.push(new Gate(2, 11, 1, 1, 'rgb(132,127,26)', 'red'))
 
     //portals
-    inst.portals.push(new Portal(1,7,1,1,'#69d1e3','blue'))
-    inst.portals.push(new Portal(17,7,1,1,'#69d1e3','blue'))
+    inst.portals.push(new Portal(1, 7, 1, 1, '#69d1e3', 'blue'))
+    inst.portals.push(new Portal(17, 7, 1, 1, '#69d1e3', 'blue'))
 
-    inst.portals.push(new Portal(12,11,1,1,'#69d1e3','red'))
-    inst.portals.push(new Portal(5,4,1,1,'#69d1e3','red'))
+    inst.portals.push(new Portal(12, 11, 1, 1, '#69d1e3', 'red'))
+    inst.portals.push(new Portal(5, 4, 1, 1, '#69d1e3', 'red'))
 
     inst.player = new Player(11, 7, 1, 1, 'rgba(15,75,208,1)')
-    inst.target = new Gold(1, 11
-        , 1, 1, 'rgba(105,209,227,1)')
+    inst.target = new Gold(1, 11, 1, 1, 'rgba(105,209,227,1)')
 });
 
 // Последний уровень
 stages.set(11, () => {
+
+    inst.stageDescription = 'Кажется у меня есть кое что'
+    // inventory
+    inst.inventory = new Inventory(0, 0, 0, 3)
+    // walls
+    inst.walls.push(new Ground(2, 2, 6, 1, 'rgba(2,138,12,1)'))
+    inst.walls.push(new Ground(3, 6, 8, 1, 'rgba(2,138,12,1)'))
+    inst.walls.push(new Ground(2, 10, 3, 1, 'rgba(2,138,12,1)'))
+    inst.walls.push(new Ground(5, 11, 2, 1, 'rgba(2,138,12,1)'))
+    inst.walls.push(new Ground(7, 10, 4, 1, 'rgba(2,138,12,1)'))
+    inst.walls.push(new Ground(15, 4, 3, 1, 'rgba(2,138,12,1)'))
+    inst.walls.push(new Ground(13, 14, 3, 1, 'rgba(2,138,12,1)'))
+    //Ladder
+    inst.ladders.push(new Ladder(8, 2, 1, 4, 'rgba(225,225,224,1)'))
+    inst.ladders.push(new Ladder(2, 6, 1, 4, 'rgba(225,225,224,1)'))
+    //Box
+    inst.boxes.push(new Box(6, 1, 1, 1, 'rgb(136,110,0)'))
+    inst.boxes.push(new Box(7, 1, 1, 1, 'rgb(136,110,0)'))
+    inst.boxes.push(new Box(16, 2, 1, 1, 'rgb(136,110,0)'))
+    inst.boxes.push(new Box(14, 12, 1, 1, 'rgb(136,110,0)'))
+    //Barrel
+    // inst.boxes.push(new Barrel(3, 5, 1, 1, 'rgba(183,113,28,1)'))
+    // buttons
+    inst.buttons.push(new Button(16, 3, 1, 1, 'rgba(138,22,2,0.5)', 'blue'))
+    inst.buttons.push(new Button(14, 13, 1, 1, 'rgba(138,22,2,0.5)', 'red'))
+    //gate
+    inst.gates.push(new Gate(5, 10, 1, 1, 'rgb(138,22,2)', 'blue'))
+    inst.gates.push(new Gate(6, 10, 1, 1, 'rgb(138,22,2)', 'red'))
+    //portals
+    inst.portals.push(new Portal(15, 9, 1, 1, '#69d1e3', 'blue'))
+    inst.portals.push(new Portal(3, 13, 1, 1, '#69d1e3', 'blue'))
+
+    inst.player = new Player(3, 1, 1, 1, 'rgba(15,75,208,1)')
+    inst.target = new Gold(9, 9, 1, 1, 'rgba(105,209,227,1)')
+});
+
+// Последний уровень
+stages.set(12, () => {
+
+    inst.stageDescription = 'Продолжение следует...'
+    // inventory
+    inst.inventory = new Inventory(99, 99, 0, 99)
     // walls
     inst.walls.push(new Ground(1, 10, 15, 1, 'rgba(2,138,12,1)'))
 
