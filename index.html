@@ -103,7 +103,7 @@
 
     function initial() {
         preview()
-        inst.audio.get('step').loop = true;
+        inst.audio.get(SOUND.STEP).loop = true;
         inst.time = setInterval(() => {
             main()
         }, 8)
@@ -165,7 +165,7 @@
         for (const portal of [...inst.portals]) {
             const outPortal = portal.getAnotherPortal();
             if (!inst.player.isMoving && portal.collision(portal.x, portal.y, [inst.player])) {
-                inst.audio.get('portal').play()
+                inst.audio.get(SOUND.PORTAL).play()
                 const dirX = inst.player.direction === 'ArrowLeft' ? -GRID_SIZE : GRID_SIZE;
                 if (!handlePlayerMove(outPortal.x, outPortal.y, outPortal.x + dirX)) {
                     inst.player.x = portal.x;
@@ -178,7 +178,7 @@
             for (const obj of [...inst.boxes]) {
                 const dirX = obj.x - inst.player.targetX > 1 ? GRID_SIZE : -GRID_SIZE;
                 if (!obj.isMoving && portal.collision(portal.x, portal.y, [obj])) {
-                    inst.audio.get('portal').play()
+                    inst.audio.get(SOUND.PORTAL).play()
                     const objX = obj.x
                     const objY = obj.y
                     obj.x = outPortal.x
@@ -200,7 +200,7 @@
             for (const obj of [...inst.guns]) {
                 const dirX = obj.x - inst.player.targetX > 1 ? GRID_SIZE : -GRID_SIZE;
                 if (portal.collision(portal.x, portal.y, [obj])) {
-                    inst.audio.get('portal').play()
+                    inst.audio.get(SOUND.PORTAL).play()
                     obj.x = outPortal.x + dirX
                     obj.targetX = outPortal.x + dirX
                     obj.y = obj.targetY = outPortal.y;
@@ -250,8 +250,8 @@
         inst.lastTime = timestamp;
         //Проверка прохождения
         if (inst.player.x === inst.target.x && inst.player.y === inst.target.y) {
-            inst.audio.get('step').loop = false;
-            inst.audio.get('newLevel').play()
+            inst.audio.get(SOUND.STEP).loop = false;
+            inst.audio.get(SOUND.NEW_LEVEL).play()
             inst.stage++
             preview(Math.round(inst.player.steps / GRID_SIZE))
         }
@@ -314,7 +314,7 @@
         inst.player.x = x
         inst.player.y = y
         let isCollisionBox = false;
-        inst.audio.get('step').play();
+        inst.audio.get(SOUND.STEP).play();
 
         if (!inst.player.isMoving && !inst.player.collision(targetX, inst.player.y, [...inst.walls])) {
             for (const box of [...inst.boxes]) {
