@@ -18,16 +18,30 @@
             height: 100vh;
             background: #222;
         }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
 
+        .loader {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
         canvas {
             border: 2px solid #444;
             background: #333;
+            display: none;
             /*block-size: 50%;*/
         }
     </style>
 
 </head>
 <body>
+<div class="loader" id="loader"></div>
 <canvas id="instCanvas"></canvas>
 <script>
     // Инициализация canvas
@@ -50,11 +64,20 @@
         gates: [],
         portals: [],
         guns: [],
+        objects: [],
         target: {},
         keys: {},
         eventKey: {},
         audio: []
     }
+
+    const GAME_OBJ = Object.freeze({
+        BOX: 'src/obj/game_object/box_obj.png',
+        BARREL: 'src/obj/game_object/barrel_obj.png',
+        LADDER: 'LADDER',
+        GUN: 'src/obj/game_object/gun_obj.png',
+        GOLD: 'src/obj/target1.png',
+    })
 
     const background = new Image();
     background.src = 'src/cover.png'
@@ -70,6 +93,8 @@
 
 
     function preview(step) {
+        document.getElementById('instCanvas').style.display = 'none';
+        document.getElementById('loader').style.display = 'block';
         clearInterval(inst.time)
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         inst.player = null
@@ -81,6 +106,7 @@
         inst.gates = []
         inst.portals = []
         inst.guns = []
+        inst.objects = []
         inst.inventory = new Inventory(0, 0, 0, 0)
         stages.get(inst.stage)();
         ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -99,6 +125,8 @@
         if (step !== undefined) {
             ctx.fillText(`Уровень ${inst.stage - 1} пройден за ${step} шагов`, 100, 100);
         }
+        document.getElementById('instCanvas').style.display = 'block';
+        document.getElementById('loader').style.display = 'none';
     }
 
     function initial() {
@@ -161,6 +189,13 @@
             gun.checkState()
             gun.move()
         }
+        //------ /Объекты -------------
+        for (const obj of [...inst.objects]) {
+            if (inst.player.collision(inst.player.x, inst.player.y, [obj])) {
+                inst.inventory.addObject(obj.imgStandSrc)
+                inst.objects = inst.objects.filter(i => i.id !== obj.id)
+            }
+        }
         //------ Порталы/ -------------
         for (const portal of [...inst.portals]) {
             const outPortal = portal.getAnotherPortal();
@@ -215,7 +250,7 @@
         //-------------------
 
         if (game_debug) {
-            for (const obj of [...inst.guns, ...inst.portals, ...inst.walls, ...inst.ladders, ...inst.boxes, ...inst.buttons, inst.target, inst.player]) {
+            for (const obj of [...inst.guns, ...inst.portals, ...inst.walls, ...inst.ladders, ...inst.boxes, ...inst.buttons, inst.target, ...inst.objects, inst.player]) {
                 ctx.fillStyle = obj.color;
                 ctx.fillRect(obj.x, obj.y, obj.width, obj.height);
                 ctx.fillText(`${obj.id}`, obj.x, obj.y);
@@ -233,7 +268,7 @@
             const drawObj = [...inst.portals, inst.target, ...inst.walls, ...inst.boxes, ...inst.gates, ...inst.buttons]
                 .sort((a, b) => a.targetX - b.targetX || b.targetY - a.targetY || b.zIndex - a.zIndex)
             // drawObj.forEach(i=>console.log(i.x))
-            for (const obj of [...inst.ladders, ...drawObj, ...inst.guns]) {
+            for (const obj of [...inst.ladders, ...drawObj, ...inst.objects, ...inst.guns]) {
                 obj.draw()
             }
             inst.player.draw()

@@ -2,18 +2,18 @@ const stages = new Map();
 
 // Первй уровень
 stages.set(1, () => {
-    inst.stageDescription = 'Это просто, пройдусь по прямой до монетки'
+    inst.stageDescription = 'Я легко втираюсь в доверие'
     // walls
     inst.walls.push(new Ground(3, 8, 8, 1, 'rgba(2,138,12,1)'))
     // inventory
     inst.inventory = new Inventory(5, 5, 5, 5)
 
     inst.player = new Player(3, 7, 1, 1, 'rgba(15,75,208,1)')
-    inst.target = new Gold(10, 7, 1, 1, 'rgba(105,209,227,1)')
+    inst.target = new Gold(10, 7, 'rgba(105,209,227,1)', GAME_OBJ.GOLD)
 });
 // Второй уровень
 stages.set(2, () => {
-    inst.stageDescription = 'Хмм, одного ящика мне будет не достаточно\n чтобы пробраться через канаву'
+    inst.stageDescription = 'Собака, если ее позвать, прибежит, кот — примет к сведению.'
     // walls
     inst.walls.push(new Ground(1, 8, 4, 1, 'rgba(2,138,12,1)'))
     inst.walls.push(new Ground(6, 8, 5, 1, 'rgba(2,138,12,1)'))
@@ -33,13 +33,13 @@ stages.set(2, () => {
     inst.boxes.push(new Box(2, 7, 1, 1, 'rgba(183,113,28,1)'))
 
     inst.player = new Player(7, 7, 1, 1, 'rgba(15,75,208,1)')
-    inst.target = new Gold(14, 7, 1, 1, 'rgba(105,209,227,1)')
+    inst.target = new Gold(14, 7, 'rgba(105,209,227,1)', GAME_OBJ.GOLD)
 });
 
 
 // Третий уровень
 stages.set(3, () => {
-    inst.stageDescription = 'Эти ящики, они мешают или помогают...'
+    inst.stageDescription = 'Жизненный опыт показывает, что провинившиеся коты хорошо\n понимают азбуку Морзе. Только стучать надо тапком по морде.'
     // walls
     inst.walls.push(new Ground(2, 8, 10, 1, 'rgba(2,138,12,1)'))
     inst.walls.push(new Ground(4, 4, 2, 1, 'rgba(2,138,12,1)'))
@@ -54,12 +54,12 @@ stages.set(3, () => {
     inst.boxes.push(new Box(5, 3, 1, 1, 'rgba(183,113,28,1)'))
 
     inst.player = new Player(4, 7, 1, 1, 'rgba(15,75,208,1)')
-    inst.target = new Gold(11, 7, 1, 1, 'rgba(105,209,227,1)')
+    inst.target = new Gold(11, 7, 'rgba(105,209,227,1)', GAME_OBJ.GOLD)
 });
 
 // Четвертый уровень
 stages.set(4, () => {
-    inst.stageDescription = 'Главное не торопиться'
+    inst.stageDescription = 'А ты чего кошечку не заводишь? \nКто тебе на старости лет стакан воды со стола опрокинет?'
     // walls
     inst.walls.push(new Ground(6, 3, 5, 1, 'rgba(2,138,12,1)'))
     inst.walls.push(new Ground(2, 5, 13, 1, 'rgba(2,138,12,1)'))
@@ -85,12 +85,12 @@ stages.set(4, () => {
 
 
     inst.player = new Player(8, 2, 1, 1, 'rgba(15,75,208,1)')
-    inst.target = new Gold(2, 11, 1, 1, 'rgba(105,209,227,1)')
+    inst.target = new Gold(2, 11, 'rgba(105,209,227,1)', GAME_OBJ.GOLD)
 });
 
 // Пятый уровень
 stages.set(5, () => {
-    inst.stageDescription = 'Интересно, что если нажать на эту синюю кнопку...'
+    inst.stageDescription = 'Кошки — одни из немногих животных, которые убивают просто\n ради удовольствия. Моя ради удовольствия убила мою мебель.'
     // walls
     inst.walls.push(new Ground(1, 8, 15, 1, 'rgba(2,138,12,1)'))
     // ladders
@@ -104,12 +104,12 @@ stages.set(5, () => {
     inst.gates.push(new Gate(13, 7, 1, 1, 'rgb(138,22,2)', 'blue'))
 
     inst.player = new Player(4, 7, 1, 1, 'rgba(15,75,208,1)')
-    inst.target = new Gold(15, 7, 1, 1, 'rgba(105,209,227,1)')
+    inst.target = new Gold(15, 7, 'rgba(105,209,227,1)', GAME_OBJ.GOLD)
 });
 
 // Шестой уровень
 stages.set(6, () => {
-    inst.stageDescription = 'Опять ворота, всех растопчу!!!'
+    inst.stageDescription = 'Подлокотник — это место для подлого кота.'
     // walls
     inst.walls.push(new Ground(1, 10, 13, 1, 'rgba(2,138,12,1)'))
     inst.walls.push(new Ground(14, 11, 1, 1, 'rgba(2,138,12,1)'))
@@ -135,12 +135,12 @@ stages.set(6, () => {
     inst.gates.push(new Gate(13, 9, 1, 1, 'rgb(138,22,2)', 'yellow'))
 
     inst.player = new Player(4, 9, 1, 1, 'rgba(15,75,208,1)')
-    inst.target = new Gold(15, 9, 1, 1, 'rgba(105,209,227,1)')
+    inst.target = new Gold(15, 9, 'rgba(105,209,227,1)', GAME_OBJ.GOLD)
 });
 
 // Седьмой уровень
 stages.set(7, () => {
-    inst.stageDescription = 'Хмм, кажется у меня в инвентаре что-то было\n (клавиши 1,2,3,4)'
+    inst.stageDescription = 'Все коты умеют летать. Летают коты сверху вниз.'
     // walls
     inst.walls.push(new Ground(1, 10, 6, 1, 'rgba(2,138,12,1)'))
     inst.walls.push(new Ground(9, 10, 5, 1, 'rgba(2,138,12,1)'))
@@ -164,9 +164,8 @@ stages.set(7, () => {
     inst.boxes.push(new Box(9, 6, 1, 1, 'rgba(183,113,28,1)'))
 
     inst.boxes.push(new Barrel(4, 1, 1, 1, 'rgba(183,113,28,1)'))
-    // inventory
-    inst.inventory = new Inventory(1, 0, 0, 0)
-
+    // objects
+    inst.objects.push(new Item(15, 9, 'rgb(164,105,227)', GAME_OBJ.BOX))
     // buttons
     inst.buttons.push(new Button(1, 9, 1, 1, 'rgba(138,22,2,0.5)', 'blue'))
     inst.buttons.push(new Button(14, 10, 1, 1, 'rgba(234,223,0,0.5)', 'yellow'))
@@ -175,12 +174,12 @@ stages.set(7, () => {
     inst.gates.push(new Gate(3, 1, 1, 1, 'rgb(132,127,26)', 'yellow'))
 
     inst.player = new Player(9, 9, 1, 1, 'rgba(15,75,208,1)')
-    inst.target = new Gold(8, 1, 1, 1, 'rgba(105,209,227,1)')
+    inst.target = new Gold(8, 1, 'rgba(105,209,227,1)', GAME_OBJ.GOLD)
 });
 
 // Восьмой уровень
 stages.set(8, () => {
-    inst.stageDescription = 'Ээх закачу-прокачу!!!'
+    inst.stageDescription = 'Однажды мне домой хомяка в клетке принесли. \nТак у меня появился телевизор.'
     // walls
     inst.walls.push(new Ground(7, 7, 6, 1, 'rgba(2,138,12,1)'))
     inst.walls.push(new Ground(1, 12, 2, 1, 'rgba(2,138,12,1)'))
@@ -192,8 +191,9 @@ stages.set(8, () => {
     inst.walls.push(new Ground(10, 12, 9, 1, 'rgba(2,138,12,1)'))
     // boxes
     inst.boxes.push(new Barrel(6, 0, 1, 1, 'rgba(183,113,28,1)'))
-    // inventory
-    inst.inventory = new Inventory(0, 2, 0, 0)
+    // objects
+    inst.objects.push(new Item(10, 6, 'rgb(164,105,227)', GAME_OBJ.BARREL))
+    inst.objects.push(new Item(9, 6, 'rgb(164,105,227)', GAME_OBJ.BARREL))
     // ladders
     inst.ladders.push(new Ladder(13, 7, 1, 5, 'rgba(225,225,224,1)'))
     // buttons
@@ -206,12 +206,12 @@ stages.set(8, () => {
     inst.gates.push(new Gate(6, 2, 1, 1, 'rgb(132,127,26)', 'red'))
 
     inst.player = new Player(13, 11, 1, 1, 'rgba(15,75,208,1)')
-    inst.target = new Gold(1, 11, 1, 1, 'rgba(105,209,227,1)')
+    inst.target = new Gold(1, 11, 'rgba(105,209,227,1)', GAME_OBJ.GOLD)
 });
 
 // Девятый уровень
 stages.set(9, () => {
-    inst.stageDescription = 'Похоже на портал, пройду через него....'
+    inst.stageDescription = 'Кот — это такое животное, которое на простой вопрос «Куда?»,\n автоматически меняет направление движения в пространстве.'
     // walls
     inst.walls.push(new Ground(3, 8, 5, 1, 'rgba(2,138,12,1)'))
     inst.walls.push(new Ground(10, 8, 5, 1, 'rgba(2,138,12,1)'))
@@ -220,12 +220,12 @@ stages.set(9, () => {
     inst.portals.push(new Portal(7, 7, 1, 1, '#69d1e3', 'blue'))
 
     inst.player = new Player(13, 7, 1, 1, 'rgba(15,75,208,1)')
-    inst.target = new Gold(3, 7, 1, 1, 'rgba(105,209,227,1)')
+    inst.target = new Gold(3, 7, 'rgba(105,209,227,1)', GAME_OBJ.GOLD)
 });
 
 // Десятый уровень
 stages.set(10, () => {
-    inst.stageDescription = 'Хмм ... как же принести ящики наверх,\nвозможно порталы помогут'
+    inst.stageDescription = 'Главным отличием между животными и людьми то, что животные\n не держат дома людей. Хотя коты уверены в обратном.'
     // walls
     inst.walls.push(new Ground(1, 8, 8, 1, 'rgba(2,138,12,1)'))
     inst.walls.push(new Ground(10, 8, 3, 1, 'rgba(2,138,12,1)'))
@@ -260,15 +260,17 @@ stages.set(10, () => {
     inst.portals.push(new Portal(5, 4, 1, 1, '#69d1e3', 'red'))
 
     inst.player = new Player(11, 7, 1, 1, 'rgba(15,75,208,1)')
-    inst.target = new Gold(1, 11, 1, 1, 'rgba(105,209,227,1)')
+    inst.target = new Gold(1, 11, 'rgba(105,209,227,1)', GAME_OBJ.GOLD)
 });
 
 // Последний уровень
 stages.set(11, () => {
 
-    inst.stageDescription = 'Кажется у меня есть кое что'
-    // inventory
-    inst.inventory = new Inventory(0, 0, 0, 3)
+    inst.stageDescription = 'Кастрированный кот Маркиз категорически \nне согласен с утверждением:\n «Все, что нас не убивает, делает нас сильнее»'
+    // objects
+    inst.objects.push(new Item(3, 1, 'rgb(164,105,227)', GAME_OBJ.GUN))
+    inst.objects.push(new Item(4, 1, 'rgb(164,105,227)', GAME_OBJ.GUN))
+    inst.objects.push(new Item(5, 1, 'rgb(164,105,227)', GAME_OBJ.GUN))
     // walls
     inst.walls.push(new Ground(2, 2, 6, 1, 'rgba(2,138,12,1)'))
     inst.walls.push(new Ground(3, 6, 8, 1, 'rgba(2,138,12,1)'))
@@ -285,8 +287,7 @@ stages.set(11, () => {
     inst.boxes.push(new Box(7, 1, 1, 1, 'rgb(136,110,0)'))
     inst.boxes.push(new Box(16, 2, 1, 1, 'rgb(136,110,0)'))
     inst.boxes.push(new Box(14, 12, 1, 1, 'rgb(136,110,0)'))
-    //Barrel
-    // inst.boxes.push(new Barrel(3, 5, 1, 1, 'rgba(183,113,28,1)'))
+
     // buttons
     inst.buttons.push(new Button(16, 3, 1, 1, 'rgba(138,22,2,0.5)', 'blue'))
     inst.buttons.push(new Button(14, 13, 1, 1, 'rgba(138,22,2,0.5)', 'red'))
@@ -297,8 +298,8 @@ stages.set(11, () => {
     inst.portals.push(new Portal(15, 9, 1, 1, '#69d1e3', 'blue'))
     inst.portals.push(new Portal(3, 13, 1, 1, '#69d1e3', 'blue'))
 
-    inst.player = new Player(3, 1, 1, 1, 'rgba(15,75,208,1)')
-    inst.target = new Gold(9, 9, 1, 1, 'rgba(105,209,227,1)')
+    inst.player = new Player(2, 1, 1, 1, 'rgba(15,75,208,1)')
+    inst.target = new Gold(9, 9, 'rgba(105,209,227,1)', GAME_OBJ.GOLD)
 });
 
 // Последний уровень
@@ -342,5 +343,5 @@ stages.set(12, () => {
     inst.ladders.push(new Ladder(15, 8, 1, 1, 'rgba(225,225,224,1)'))
 
     inst.player = new Player(9, 9, 1, 1, 'rgba(15,75,208,1)')
-    inst.target = new Gold(8, 1, 1, 1, 'rgba(105,209,227,1)')
+    inst.target = new Gold(8, 1, 'rgba(105,209,227,1)', GAME_OBJ.GOLD)
 });

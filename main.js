@@ -171,14 +171,16 @@ class Gate extends MoveRect {
 
 class Gold extends MoveRect {
     imgStand;
+    imgStandSrc;
     zIndex;
     tick;
 
-    constructor(x, y, width, height, color) {
-        super(x, y, width, height, color);
+    constructor(x, y, color, imgStandSrc) {
+        super(x, y, 1, 1, color);
         this.zIndex = 1
         this.imgStand = new Image()
-        this.imgStand.src = `src/obj/target1.png`
+        this.imgStandSrc = imgStandSrc
+        this.imgStand.src = imgStandSrc
         this.tick = 0
         setInterval(() => {
             this.tick++
@@ -194,7 +196,8 @@ class Gold extends MoveRect {
         const srcWidth = 100;
         const srcHeight = 100;
         //  масштаб по меньшей стороне
-        const scale = Math.min(GRID_SIZE / srcWidth, GRID_SIZE / srcHeight);
+        const size = GAME_OBJ.GOLD === this.imgStandSrc ? GRID_SIZE : GRID_SIZE * 0.8
+        const scale = Math.min(size / srcWidth, size / srcHeight);
         const scaledWidth = srcWidth * scale;
         const scaledHeight = srcHeight * scale;
 
@@ -204,6 +207,13 @@ class Gold extends MoveRect {
             Math.floor(this.x), Math.floor(this.y),
             Math.floor(scaledWidth), Math.floor(scaledHeight),  // конечные координаты (x,y,w,h)
         );
+    }
+}
+
+
+class Item extends Gold{
+    constructor(x, y, color, imgStandSrc) {
+        super(x, y, color, imgStandSrc);
     }
 }
 
@@ -370,10 +380,6 @@ class Inventory {
     imgBarrel;
     imgLadder;
     imgGun;
-    box = 'box'
-    barrel = 'barrel'
-    ladder = 'ladder'
-    gun = 'gun'
     timeDisable;
 
     constructor(boxCount, barrelCount, ladderCount, gunCount) {
@@ -387,19 +393,19 @@ class Inventory {
         this.imgLadder.src = `src/obj/ladder/1.png`
         this.imgGun.src = 'src/obj/gun.png'
         this.bucket = new Map()
-        this.bucket.set(this.box, boxCount)
-        this.bucket.set(this.barrel, barrelCount)
-        this.bucket.set(this.ladder, ladderCount)
-        this.bucket.set(this.gun, gunCount)
+        this.bucket.set(GAME_OBJ.BOX, boxCount)
+        this.bucket.set(GAME_OBJ.BARREL, barrelCount)
+        this.bucket.set(GAME_OBJ.LADDER, ladderCount)
+        this.bucket.set(GAME_OBJ.GUN, gunCount)
         this.mediatorBucket = new Map();
-        this.mediatorBucket.set('1', this.box)
-        this.mediatorBucket.set('2', this.barrel)
-        this.mediatorBucket.set('3', this.ladder)
-        this.mediatorBucket.set('4', this.gun)
+        this.mediatorBucket.set('1', GAME_OBJ.BOX)
+        this.mediatorBucket.set('2', GAME_OBJ.BARREL)
+        this.mediatorBucket.set('3', GAME_OBJ.LADDER)
+        this.mediatorBucket.set('4', GAME_OBJ.GUN)
     }
 
 
-// Создание объектов из инвентаря
+// Получение объектов из инвентаря
     handleCreate(key) {
         if (!inst.player.isMoving && this.timeDisable === 0 && (key === '1' || key === '2' || key === '3' || key === '4')) {
             inst.player.isMoving = false
@@ -407,16 +413,16 @@ class Inventory {
             const obj = this.mediatorBucket.get(key)
             let count = this.bucket.get(obj)
             if (this.bucket.get(obj) !== 0) {
-                if (obj === this.box) {
+                if (obj === GAME_OBJ.BOX) {
                     inst.boxes.push(new Box(inst.player.x / GRID_SIZE, inst.player.y / GRID_SIZE, 1, 1, 'rgba(183,113,28,1)'))
                     inst.audio.get(SOUND.NEW_OBJ).play();
-                } else if (obj === this.barrel) {
+                } else if (obj === GAME_OBJ.BARREL) {
                     inst.boxes.push(new Barrel(inst.player.x / GRID_SIZE, inst.player.y / GRID_SIZE, 1, 1, 'rgba(183,113,28,1)'))
                     inst.audio.get(SOUND.NEW_OBJ).play();
-                } else if (obj === this.ladder) {
+                } else if (obj === GAME_OBJ.LADDER) {
                     inst.ladders.push(new Ladder(inst.player.x / GRID_SIZE, inst.player.y / GRID_SIZE, 1, 1, 'rgba(183,113,28,1)'))
                     inst.audio.get(SOUND.NEW_OBJ).play();
-                } else if (obj === this.gun) {
+                } else if (obj === GAME_OBJ.GUN) {
                     inst.guns.push(new Gun(inst.player.x / GRID_SIZE, inst.player.y / GRID_SIZE, 1, 1, 'rgb(72,183,28)'))
                     inst.audio.get(SOUND.SHOT).play();
                 }
@@ -428,6 +434,12 @@ class Inventory {
             }, this.timeDisable)
         }
     }
+  // Добавление объектов в инвентарь
+    addObject(obj) {
+        let count = this.bucket.get(obj)
+        this.bucket.set(obj, ++count)
+        inst.audio.get(SOUND.NEW_OBJ).play();
+    }
 
     draw() {
         ctx.fillStyle = '#2f3136';
@@ -435,16 +447,16 @@ class Inventory {
         ctx.fillStyle = '#fff';
         ctx.font = '20px Calibri';
         ctx.fillText(`Кл '4`, GRID_SIZE * 19, GRID_SIZE * 0.3);
-        ctx.fillText(`${this.bucket.get('gun')}`, GRID_SIZE * 19 + 14, GRID_SIZE * 1.4);
+        ctx.fillText(`${this.bucket.get(GAME_OBJ.GUN)}`, GRID_SIZE * 19 + 14, GRID_SIZE * 1.4);
         ctx.drawImage(this.imgGun, baseWidth - GRID_SIZE, 30, 40, 40)
         ctx.fillText(`Кл '3'`, GRID_SIZE * 18, GRID_SIZE * 0.3);
-        ctx.fillText(`${this.bucket.get('ladder')}`, GRID_SIZE * 18 + 14, GRID_SIZE * 1.4);
+        ctx.fillText(`${this.bucket.get(GAME_OBJ.LADDER)}`, GRID_SIZE * 18 + 14, GRID_SIZE * 1.4);
         ctx.drawImage(this.imgLadder, baseWidth - GRID_SIZE * 2, 30, 40, 40)
         ctx.fillText(`Кл '2'`, GRID_SIZE * 17, GRID_SIZE * 0.3);
-        ctx.fillText(`${this.bucket.get('barrel')}`, GRID_SIZE * 17 + 14, GRID_SIZE * 1.4);
+        ctx.fillText(`${this.bucket.get(GAME_OBJ.BARREL)}`, GRID_SIZE * 17 + 14, GRID_SIZE * 1.4);
         ctx.drawImage(this.imgBarrel, baseWidth - GRID_SIZE * 3, 30, 40, 40)
         ctx.fillText(`Кл '1'`, GRID_SIZE * 16, GRID_SIZE * 0.3);
-        ctx.fillText(`${this.bucket.get('box')}`, GRID_SIZE * 16 + 14, GRID_SIZE * 1.4);
+        ctx.fillText(`${this.bucket.get(GAME_OBJ.BOX)}`, GRID_SIZE * 16 + 14, GRID_SIZE * 1.4);
         ctx.drawImage(this.imgBox, baseWidth - GRID_SIZE * 4, 30, 40, 40)
     }
 }
