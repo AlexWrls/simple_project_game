@@ -73,7 +73,7 @@ class MoveRect extends Rect {
         if (dy === 0 && dx === 0) {
             this.isMoving = false
             if (this.isFalling) {
-                inst.audio.get(SOUND.FALL).play()
+                inst.audio.get(SOUND.FALL).playSound()
             }
             this.isFalling = false
             return
@@ -111,12 +111,12 @@ class Button extends MoveRect {
     checkState() {
         if (this.active) {
             if (!this.wasActive) {
-                inst.audio.get(SOUND.BTN).play()
+                inst.audio.get(SOUND.BTN).playSound()
                 this.wasActive = true
             }
         } else {
             if (this.wasActive) {
-                inst.audio.get(SOUND.BTN).play()
+                inst.audio.get(SOUND.BTN).playSound()
                 this.wasActive = false
             }
         }
@@ -153,12 +153,12 @@ class Gate extends MoveRect {
         this.open = this.buttons.some(btn => btn.active) || this.collision(this.x, this.y, [...inst.boxes, inst.player])
         if (this.open) {
             if (!this.wasOpen) {
-                inst.audio.get(SOUND.OPEN).play()
+                inst.audio.get(SOUND.OPEN).playSound()
                 this.wasOpen = true
             }
         } else {
             if (this.wasOpen) {
-                inst.audio.get(SOUND.CLOSE).play()
+                inst.audio.get(SOUND.CLOSE).playSound()
                 this.wasOpen = false
             }
         }
@@ -275,7 +275,7 @@ class Barrel extends MoveRect {
         if (this.direction !== 0 && !this.isMoving && !this.collision(this.x + this.direction, this.y, [...inst.walls, ...inst.boxes])) {
             this.targetX = this.x + this.direction
         } else if (!this.isMoving && this.direction !== 0) {
-            inst.audio.get(SOUND.FALL).play()
+            inst.audio.get(SOUND.FALL).playSound()
             this.targetX = this.x
             this.direction = 0
         }
@@ -415,16 +415,16 @@ class Inventory {
             if (this.bucket.get(obj) !== 0) {
                 if (obj === GAME_OBJ.BOX) {
                     inst.boxes.push(new Box(inst.player.x / GRID_SIZE, inst.player.y / GRID_SIZE, 1, 1, 'rgba(183,113,28,1)'))
-                    inst.audio.get(SOUND.NEW_OBJ).play();
+                    inst.audio.get(SOUND.NEW_OBJ).playSound();
                 } else if (obj === GAME_OBJ.BARREL) {
                     inst.boxes.push(new Barrel(inst.player.x / GRID_SIZE, inst.player.y / GRID_SIZE, 1, 1, 'rgba(183,113,28,1)'))
-                    inst.audio.get(SOUND.NEW_OBJ).play();
+                    inst.audio.get(SOUND.NEW_OBJ).playSound();
                 } else if (obj === GAME_OBJ.LADDER) {
                     inst.ladders.push(new Ladder(inst.player.x / GRID_SIZE, inst.player.y / GRID_SIZE, 1, 1, 'rgba(183,113,28,1)'))
-                    inst.audio.get(SOUND.NEW_OBJ).play();
+                    inst.audio.get(SOUND.NEW_OBJ).playSound();
                 } else if (obj === GAME_OBJ.GUN) {
                     inst.guns.push(new Gun(inst.player.x / GRID_SIZE, inst.player.y / GRID_SIZE, 1, 1, 'rgb(72,183,28)'))
-                    inst.audio.get(SOUND.SHOT).play();
+                    inst.audio.get(SOUND.SHOT).playSound();
                 }
                 this.bucket.set(obj, --count)
             }
@@ -438,14 +438,14 @@ class Inventory {
     addObject(obj) {
         let count = this.bucket.get(obj)
         this.bucket.set(obj, ++count)
-        inst.audio.get(SOUND.NEW_OBJ).play();
+        inst.audio.get(SOUND.NEW_OBJ).playSound();
     }
 
     draw() {
         ctx.fillStyle = '#2f3136';
         ctx.fillRect(baseWidth - (GRID_SIZE * 4) - 20, 0, GRID_SIZE * 5, GRID_SIZE * 1.5);
         ctx.fillStyle = '#fff';
-        ctx.font = '20px Calibri';
+        ctx.font = '20px "Comic Sans MS", cursive, sans-serif';
         ctx.fillText(`Кл '4`, GRID_SIZE * 19, GRID_SIZE * 0.3);
         ctx.fillText(`${this.bucket.get(GAME_OBJ.GUN)}`, GRID_SIZE * 19 + 14, GRID_SIZE * 1.4);
         ctx.drawImage(this.imgGun, baseWidth - GRID_SIZE, 30, 40, 40)
@@ -499,7 +499,7 @@ class Gun extends MoveRect {
         if (this.collision(this.x, this.y, [...inst.walls])) {
             this.direction = 0
             inst.guns = inst.guns.filter(g => g.id !== this.id)
-            inst.audio.get(SOUND.NEW_OBJ).play();
+            inst.audio.get(SOUND.NEW_OBJ).playSound();
         }
         for (const box of [...inst.boxes]) {
             if (box.collision(box.x, box.y, [this])) {
@@ -507,7 +507,7 @@ class Gun extends MoveRect {
                 this.direction = 0
                 if (!this.coll) {
                     this.tick = 0
-                    inst.audio.get(SOUND.BANG).play()
+                    inst.audio.get(SOUND.BANG).playSound()
                 }
                 this.coll = true
                 setTimeout(() => {
@@ -624,13 +624,13 @@ class Player extends MoveRect {
                 Math.floor(scaledWidth), Math.floor(scaledHeight),  // конечные координаты (x,y,w,h)
             );
         } else if (!this.isMoving && !left && !right && !up && !down) {
-            inst.audio.get(SOUND.STEP).pause()
+            inst.audio.get(SOUND.STEP).pauseSound()
             ctx.drawImage(this.imgStand, this.x + offsetX, this.y + offsetY, scaledWidth + 5, scaledHeight + 5)
         } else {
             let imgLeft
             let imgRight
             if (this.isFalling) {
-                inst.audio.get(SOUND.STEP).pause()
+                inst.audio.get(SOUND.STEP).pauseSound()
                 imgLeft = imgRight = this.imgFalling
             } else if (this.onLadder && !left && !right) {
                 imgLeft = imgRight = this.imgLadder

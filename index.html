@@ -31,7 +31,7 @@
             border-radius: 50%;
             animation: spin 1s linear infinite;
         }
-        canvas {
+        #canvas {
             border: 2px solid #444;
             background: #333;
             display: none;
@@ -93,8 +93,8 @@
 
 
     function preview(step) {
-        document.getElementById('instCanvas').style.display = 'none';
         document.getElementById('loader').style.display = 'block';
+        inst.audio.get(SOUND.BACKGROUND).pauseSound()
         clearInterval(inst.time)
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         inst.player = null
@@ -131,7 +131,9 @@
 
     function initial() {
         preview()
-        inst.audio.get(SOUND.STEP).loop = true;
+        inst.audio.get(SOUND.BACKGROUND).setLoop(true)
+        inst.audio.get(SOUND.BACKGROUND).playSound()
+        inst.audio.get(SOUND.STEP).setLoop(true)
         inst.time = setInterval(() => {
             main()
         }, 8)
@@ -200,7 +202,7 @@
         for (const portal of [...inst.portals]) {
             const outPortal = portal.getAnotherPortal();
             if (!inst.player.isMoving && portal.collision(portal.x, portal.y, [inst.player])) {
-                inst.audio.get(SOUND.PORTAL).play()
+                inst.audio.get(SOUND.PORTAL).playSound()
                 const dirX = inst.player.direction === 'ArrowLeft' ? -GRID_SIZE : GRID_SIZE;
                 if (!handlePlayerMove(outPortal.x, outPortal.y, outPortal.x + dirX)) {
                     inst.player.x = portal.x;
@@ -213,7 +215,7 @@
             for (const obj of [...inst.boxes]) {
                 const dirX = obj.x - inst.player.targetX > 1 ? GRID_SIZE : -GRID_SIZE;
                 if (!obj.isMoving && portal.collision(portal.x, portal.y, [obj])) {
-                    inst.audio.get(SOUND.PORTAL).play()
+                    inst.audio.get(SOUND.PORTAL).playSound()
                     const objX = obj.x
                     const objY = obj.y
                     obj.x = outPortal.x
@@ -235,7 +237,7 @@
             for (const obj of [...inst.guns]) {
                 const dirX = obj.x - inst.player.targetX > 1 ? GRID_SIZE : -GRID_SIZE;
                 if (portal.collision(portal.x, portal.y, [obj])) {
-                    inst.audio.get(SOUND.PORTAL).play()
+                    inst.audio.get(SOUND.PORTAL).playSound()
                     obj.x = outPortal.x + dirX
                     obj.targetX = outPortal.x + dirX
                     obj.y = obj.targetY = outPortal.y;
@@ -276,17 +278,18 @@
 
         // Отрисовка информации
         ctx.fillStyle = '#fff';
-        ctx.font = '25px Calibri';
-        // ctx.fillText(`Steps: ${inst.player.steps}`, 10, 20);
-        ctx.fillText(`Для начала уровня заново жми 'Enter'`, 10, 20);
-        ctx.fillText(`Переключение уровней 'Z'- назад, 'X' - вперед`, 10, 40);
-        ctx.fillText(`Шаги: ${Math.round(inst.player.steps / GRID_SIZE)}`, 10, 60);
+        ctx.font = '20px "Comic Sans MS", cursive, sans-serif';
+        ctx.fillText(`Для начала уровня заново жми 'Enter'`, 10, baseHeight - 20);
+        ctx.fillText(`Переключение уровней 'Z'- назад, 'X' - вперед`, 10,baseHeight - 40);
+        ctx.fillText(`Отключение музыки  'M'- mute sound`, 10, baseHeight -60);
+        ctx.font = '24px "Comic Sans MS", cursive, sans-serif';
+        ctx.fillText(`Шаги: ${Math.round(inst.player.steps / GRID_SIZE)}`, baseWidth - GRID_SIZE *2, baseHeight - GRID_SIZE/2 );
         inst.inventory.draw()
         inst.lastTime = timestamp;
         //Проверка прохождения
         if (inst.player.x === inst.target.x && inst.player.y === inst.target.y) {
-            inst.audio.get(SOUND.STEP).loop = false;
-            inst.audio.get(SOUND.NEW_LEVEL).play()
+            inst.audio.get(SOUND.STEP).setLoop(false)
+            inst.audio.get(SOUND.NEW_LEVEL).playSound()
             inst.stage++
             preview(Math.round(inst.player.steps / GRID_SIZE))
         }
@@ -314,6 +317,9 @@
         if (key === 'x' || key === 'ч') {
             if (inst.stage < 12) inst.stage++;
             preview();
+        }
+        if (key === 'm' || key === 'ь') {
+            inst.audio.get(SOUND.BACKGROUND).muteSound();
         }
 
         // Если игрок уже движется
@@ -349,7 +355,7 @@
         inst.player.x = x
         inst.player.y = y
         let isCollisionBox = false;
-        inst.audio.get(SOUND.STEP).play();
+        inst.audio.get(SOUND.STEP).playSound();
 
         if (!inst.player.isMoving && !inst.player.collision(targetX, inst.player.y, [...inst.walls])) {
             for (const box of [...inst.boxes]) {
