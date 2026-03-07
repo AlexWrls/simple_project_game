@@ -8,4 +8,4 @@ https://alexwrls.github.io/simple_project_game/
 The cat is not happy, he lost all his coins in space, help him collect them all
 
 ## Screenshot
-![Image alt](https://github.com/AlexWrls/simple_project_game/blob/main/src/screenshot.png)
+![Image alt](https://github.com/AlexWrls/simple_project_game/blob/main/public/resource/screenshot.png)
