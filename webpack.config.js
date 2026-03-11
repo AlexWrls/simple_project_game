@@ -8,7 +8,8 @@ module.exports = {
         filename: 'bundle.js',
         path: path.resolve(__dirname, 'dist'),
         chunkFormat: 'array-push',
-        clean: true, // очищает dist при сборке
+        clean: true,
+        publicPath: 'auto',
     },
     mode: 'development',
     plugins: [
