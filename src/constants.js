@@ -2,31 +2,35 @@ export const GRID_SIZE = 60;
 
 export let canvas = null;
 export let ctx = null;
-export let state = {
-    stage: 1,
-    stageDescription: '',
-    time: {},
-    fps: 0,
-    player: {},
-    walls: [],
-    ladders: [],
-    boxes: [],
-    buttons: [],
-    gates: [],
-    portals: [],
-    guns: [],
-    objects: [],
-    target: {},
-    keys: {},
-    eventKey: {},
-    audio: [],
-    inventory : {}
-}
+export let state = null;
+
 
 export function initCanvas(canvasElement) {
     canvas = canvasElement;
     ctx = canvas.getContext('2d');
+    state = {
+        stage: 1,
+        stageDescription: '',
+        time: null,
+        fps: 0,
+        player: null,
+        walls: [],
+        ladders: [],
+        boxes: [],
+        buttons: [],
+        gates: [],
+        portals: [],
+        guns: [],
+        objects: [],
+        target: null,
+        keys: null,
+        eventKey: null,
+        audio: [],
+        inventory: null
+    }
+    return true;
 }
+
 export const game_debug = false;
 export const baseWidth = 1200;
 export const baseHeight = 1000;
@@ -41,6 +45,7 @@ export const SOUND = Object.freeze({
     NEW_OBJ: 'NEW_OBJ',
     PORTAL: 'PORTAL',
     NEW_LEVEL: 'NEW_LEVEL',
+    RELOAD_LEVEL: 'RELOAD_LEVEL',
     BANG: 'BANG',
     SHOT: 'SHOT',
 })

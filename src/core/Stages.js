@@ -17,10 +17,10 @@ export default class Stages {
     stages
 
     constructor() {
-     this.stages = this.initLevels()
+        this.stages = this.initLevels()
     }
-    
-    loadLevel(num){
+
+    loadLevel(num) {
         state.player = null
         state.target = null
         state.boxes = []
@@ -35,6 +35,18 @@ export default class Stages {
         this.stages.get(num)()
     }
 
+    getReloadLevelText() {
+        const txt = [
+            'Повернуть бы время вспать!',
+            'Сдаюсь. Ты подебил!',
+            'Просто будь совой!',
+            'Русалка утопилась!',
+            'Ты не ты, когды ты холоден!',
+            'Больше знаешь, крепче мстишь!',
+            'Удачного дна!',
+        ]
+        return txt[Math.floor(Math.random() * txt.length)] + ' Попробую еще раз =)';
+    }
 
     initLevels() {
         const stages = new Map();
@@ -386,6 +398,6 @@ export default class Stages {
         });
         return stages
     }
-    
-    
+
+
 }

@@ -11,14 +11,13 @@ window.addEventListener('DOMContentLoaded', () => {
         return;
     }
 
-    initCanvas(canvasElement);
-
-    const game = new GameEngine();
-    window.game = game; // для отладки
-    game.initial();
-
-    window.addEventListener('load', resizeCanvas);
-    window.addEventListener('resize', resizeCanvas);
+    if (initCanvas(canvasElement)) {
+        window.addEventListener('load', resizeCanvas);
+        window.addEventListener('resize', resizeCanvas);
+        setTimeout(() => {
+            new GameEngine()
+        }, 500)
+    }
 
 });
 

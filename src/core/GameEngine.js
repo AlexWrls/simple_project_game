@@ -14,9 +14,10 @@ export default class GameEngine {
         this.handleKeyUp = this.handleKeyUp.bind(this);
         window.addEventListener('keydown', this.handleKeyDown);
         window.addEventListener('keyup', this.handleKeyUp);
+        this.preview(undefined,undefined);
     }
 
-     initSound() {
+    initSound() {
         let map = new Map()
 
         map.set(SOUND.BACKGROUND, new SoundEffect('back_sound.mp3', 1, 0.3, 1));
@@ -28,13 +29,14 @@ export default class GameEngine {
         map.set(SOUND.NEW_OBJ, new SoundEffect('new_obj.mp3', 1.5, 0.6, 5));
         map.set(SOUND.PORTAL, new SoundEffect('portal.mp3', 1.5, 0.8, 5));
         map.set(SOUND.NEW_LEVEL, new SoundEffect('new_level.mp3', 1, 0.4, 5));
+        map.set(SOUND.RELOAD_LEVEL, new SoundEffect('reload_level.mp3', 1, 1, 1));
         map.set(SOUND.BANG, new SoundEffect('bang.mp3', 1, 0.8, 5));
         map.set(SOUND.SHOT, new SoundEffect('fire.mp3', 1, 0.6, 5));
 
         return map
     }
 
-    preview(step) {
+    preview(step,reloadText) {
         // document.getElementById('loader').style.display = 'block';
         state.audio.get(SOUND.BACKGROUND).pauseSound()
         clearInterval(state.time)
@@ -52,12 +54,14 @@ export default class GameEngine {
         ctx.fillText(`Для начала уровня жми 'Enter' или 'Space'`, 100, 650);
         ctx.fillText(`Переключение уровней: клавиша 'Z'- назад, клавиша 'X' - вперед`, 100, 700);
         ctx.drawImage(cat, 350, 500, 92, 110)
-        drawSpeechBubble(ctx, 150, 350, 800, 110, 250, 500, state.stageDescription);
+        if (reloadText !== undefined) {
+            drawSpeechBubble(ctx, 150, 350, 800, 110, 250, 500, this.stages.getReloadLevelText());
+        } else {
+            drawSpeechBubble(ctx, 150, 350, 800, 110, 250, 500, state.stageDescription);
+        }
         if (step !== undefined) {
             ctx.fillText(`Уровень ${state.stage - 1} пройден за ${step} шагов`, 100, 100);
         }
-        // document.getElementById('instCanvas').style.display = 'block';
-        // document.getElementById('loader').style.display = 'none';
     }
 
     initial() {
@@ -223,6 +227,12 @@ export default class GameEngine {
             state.audio.get(SOUND.NEW_LEVEL).playSound()
             state.stage++
             this.preview(Math.round(state.player.steps / GRID_SIZE))
+        }
+        //Проверка ухода за границу
+        if (state.player.x > canvas.width || state.player.y > canvas.height) {
+            state.audio.get(SOUND.STEP).setLoop(false)
+            state.audio.get(SOUND.RELOAD_LEVEL).playSound()
+            this.preview(undefined,true)
         }
     }
 
