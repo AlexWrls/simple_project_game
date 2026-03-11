@@ -1,11 +1,12 @@
-## CAT COIN
+## SPACE-CAT
 
-## Play the game here:
+## Давай валяй:
 https://alexwrls.github.io/simple_project_game/
 
-## Description:
+## Что к чему:
+1) подтянуть кучу хлама командой: `npm install`
+2) запустить все это командой: `npm run start`
+3) собрать все в кучу с нзванием dist командой: `npm run build`
 
-The cat is not happy, he lost all his coins in space, help him collect them all
-
-## Screenshot
-![Image alt](https://github.com/AlexWrls/simple_project_game/blob/main/src/screenshot.png)
+## Картинка
+![Image alt](https://github.com/AlexWrls/simple_project_game/blob/main/public/resource/screenshot.png)

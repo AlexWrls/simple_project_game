@@ -1,5 +1,6 @@
-//Отрисовка диалога
-function drawSpeechBubble(ctx, x, y, width, height, tailX, tailY, text) {
+
+
+export default function drawSpeechBubble(ctx, x, y, width, height, tailX, tailY, text) {
     ctx.save();
     ctx.beginPath();
     ctx.moveTo(x + 20, y);
