@@ -6,10 +6,9 @@ module.exports = {
     entry: './src/index.js',
     output: {
         filename: 'bundle.js',
-        path: path.resolve(__dirname, 'dist'),
+        path: path.resolve(__dirname, 'docs'),
         chunkFormat: 'array-push',
         clean: true,
-        publicPath: 'auto',
     },
     mode: 'development',
     plugins: [
@@ -36,7 +35,7 @@ module.exports = {
                 publicPath: '/',
             },
             {
-                directory: path.join(__dirname, 'dist'),
+                directory: path.join(__dirname, 'docs'),
                 publicPath: '/',
             }
         ],
