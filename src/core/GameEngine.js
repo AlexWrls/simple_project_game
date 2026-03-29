@@ -14,7 +14,7 @@ export default class GameEngine {
         this.handleKeyUp = this.handleKeyUp.bind(this);
         window.addEventListener('keydown', this.handleKeyDown);
         window.addEventListener('keyup', this.handleKeyUp);
-        this.preview(undefined,undefined);
+        this.preview(undefined, undefined);
     }
 
     initSound() {
@@ -36,7 +36,7 @@ export default class GameEngine {
         return map
     }
 
-    preview(step,reloadText) {
+    preview(step, reloadText) {
         // document.getElementById('loader').style.display = 'block';
         state.audio.get(SOUND.BACKGROUND).pauseSound()
         clearInterval(state.time)
@@ -89,7 +89,7 @@ export default class GameEngine {
 
         //------ Основное перемещение -------------
         state.player.gravity = !state.player.collision(state.player.x, state.player.y, [...state.ladders])
-            && !state.player.collision(state.player.x, state.player.y + GRID_SIZE, [...state.walls, ...state.boxes, ...state.ladders])
+            && !state.player.collision(state.player.x, state.player.y + GRID_SIZE, [...state.walls, ...state.sands, ...state.boxes, ...state.ladders])
         if (state.player.gravity) {
             state.player.targetY = state.player.y + GRID_SIZE;
             state.player.isFalling = true;
@@ -98,7 +98,7 @@ export default class GameEngine {
         state.player.move()
         for (const box of state.boxes) {
             box.checkState()
-            box.gravity = !box.collision(box.x, box.y + GRID_SIZE, [...state.walls, ...state.boxes, ...state.ladders, state.player])
+            box.gravity = !box.collision(box.x, box.y + GRID_SIZE, [...state.walls, ...state.sands, ...state.boxes, ...state.ladders, state.player])
             if (box.gravity) {
                 box.targetY = box.y + GRID_SIZE;
                 box.isFalling = true;
@@ -187,7 +187,7 @@ export default class GameEngine {
         //-------------------
 
         if (game_debug) {
-            for (const obj of [...state.guns, ...state.portals, ...state.walls, ...state.ladders, ...state.boxes, ...state.buttons, state.target, ...state.objects, state.player]) {
+            for (const obj of [...state.guns, ...state.portals, ...state.walls, ...state.sands, ...state.ladders, ...state.boxes, ...state.buttons, state.target, ...state.objects, state.player]) {
                 ctx.fillStyle = obj.color;
                 ctx.fillRect(obj.x, obj.y, obj.width, obj.height);
                 ctx.fillText(`${obj.id}`, obj.x, obj.y);
@@ -202,7 +202,7 @@ export default class GameEngine {
                 }
             }
         } else {
-            const drawObj = [...state.portals, state.target, ...state.walls, ...state.boxes, ...state.gates, ...state.buttons]
+            const drawObj = [...state.portals, state.target, ...state.walls, ...state.sands, ...state.boxes, ...state.gates, ...state.buttons]
                 .sort((a, b) => a.targetX - b.targetX || b.targetY - a.targetY || b.zIndex - a.zIndex)
             // drawObj.forEach(i=>console.log(i.x))
             for (const obj of [...state.ladders, ...drawObj, ...state.objects, ...state.guns]) {
@@ -232,7 +232,7 @@ export default class GameEngine {
         if (state.player.x > canvas.width || state.player.y > canvas.height) {
             state.audio.get(SOUND.STEP).setLoop(false)
             state.audio.get(SOUND.RELOAD_LEVEL).playSound()
-            this.preview(undefined,true)
+            this.preview(undefined, true)
         }
     }
 
@@ -256,7 +256,7 @@ export default class GameEngine {
             this.preview();
         }
         if (key === 'x' || key === 'ч') {
-            if (state.stage < 12) state.stage++;
+            if (state.stage < 13) state.stage++;
             this.preview();
         }
         if (key === 'm' || key === 'ь') {
@@ -278,7 +278,7 @@ export default class GameEngine {
         state.player.onLadder = state.player.collision(state.player.x, state.player.y, [...state.ladders]) ||
             (key === 'ArrowDown' && state.player.collision(state.player.x, state.player.y + GRID_SIZE, [...state.ladders]));
 
-        if (state.player.onLadder && !state.player.isMoving && !state.player.collision(state.player.x, targetY, [...state.walls]) && ['ArrowUp', 'ArrowDown'].includes(key)) {
+        if (state.player.onLadder && !state.player.isMoving && !state.player.collision(state.player.x, targetY, [...state.walls,...state.sands]) && ['ArrowUp', 'ArrowDown'].includes(key)) {
             state.player.isPush = false;
             state.player.targetY = targetY;
             state.player.isMoving = true;
@@ -298,7 +298,7 @@ export default class GameEngine {
         let isCollisionBox = false;
         state.audio.get(SOUND.STEP).playSound();
 
-        if (!state.player.isMoving && !state.player.collision(targetX, state.player.y, [...state.walls])) {
+        if (!state.player.isMoving && !state.player.collision(targetX, state.player.y, [...state.walls,...state.sands])) {
             for (const box of [...state.boxes]) {
                 if (!box.isMoving && !box.gravity && state.player.collision(targetX, state.player.y, [box])) {
                     console.log(state.player.direction)
@@ -306,7 +306,7 @@ export default class GameEngine {
                     const boxTargetX = box.x + dirX;
                     state.player.isPush = true;
                     isCollisionBox = true;
-                    if (!box.collision(boxTargetX, box.y, [...state.boxes, ...state.walls])) {
+                    if (!box.isSands && !box.collision(boxTargetX, box.y, [...state.boxes, ...state.walls, ...state.sands])) {
                         box.targetX = boxTargetX;
                         box.direction = dirX;
                         box.isMoving = true;

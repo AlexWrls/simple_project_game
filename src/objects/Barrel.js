@@ -2,6 +2,7 @@ import MoveBlock from "../entities/MoveBlock";
 import {ctx, GRID_SIZE, SOUND, state} from "../constants";
 
 export default class Barrel extends MoveBlock {
+    isSands;
     imgStand;
     imgMove;
     zIndex;
@@ -10,6 +11,7 @@ export default class Barrel extends MoveBlock {
     constructor(x, y, width, height, color) {
         super(x, y, width, height, color);
         this.zIndex = 2
+        this.isSands = false
         this.imgStand = new Image()
         this.imgMove = new Image()
         this.imgStand.src = 'resource/obj/barrel.png'
@@ -24,7 +26,10 @@ export default class Barrel extends MoveBlock {
     }
 
     checkState() {
-        if (this.direction !== 0 && !this.isMoving && !this.collision(this.x + this.direction, this.y, [...state.walls, ...state.boxes])) {
+        if (this.collision(this.x, this.y, [...state.sands])){
+            this.direction = 0
+            this.isMoving = false;
+        }else if (this.direction !== 0 && !this.isMoving && !this.collision(this.x + this.direction, this.y, [...state.walls, ...state.boxes])) {
             this.targetX = this.x + this.direction
         } else if (!this.isMoving && this.direction !== 0) {
             state.audio.get(SOUND.FALL).playSound()

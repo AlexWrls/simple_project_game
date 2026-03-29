@@ -15,6 +15,7 @@ export function initCanvas(canvasElement) {
         fps: 0,
         player: null,
         walls: [],
+        sands: [],
         ladders: [],
         boxes: [],
         buttons: [],

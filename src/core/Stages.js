@@ -10,6 +10,7 @@ import Gate from "../objects/Gate";
 import Barrel from "../objects/Barrel";
 import Item from "../objects/Item";
 import Portal from "../objects/Portal";
+import Sands from "../objects/Sands";
 
 
 export default class Stages {
@@ -25,6 +26,7 @@ export default class Stages {
         state.target = null
         state.boxes = []
         state.walls = []
+        state.sands = []
         state.ladders = []
         state.buttons = []
         state.gates = []
@@ -353,8 +355,40 @@ export default class Stages {
             state.target = new Gold(9, 9, 'rgba(105,209,227,1)', GAME_OBJ.GOLD)
         });
 
-// Последний уровень
         stages.set(12, () => {
+            state.stageDescription = 'Кошачья заповедь:\n если тебя погладили по левой щеке - подставь правую!'
+            // walls
+            state.walls.push(new Ground(12, 4, 4, 1, 'rgb(2,137,13)'))
+            state.walls.push(new Ground(3, 7, 1, 1, 'rgb(2,137,13)'))
+            state.walls.push(new Ground(5, 7, 8, 1, 'rgb(2,137,13)'))
+            state.walls.push(new Ground(14, 7, 2, 1, 'rgb(2,137,13)'))
+            state.walls.push(new Ground(5, 4, 2, 1, 'rgb(2,137,13)'))
+            // sands
+            state.sands.push(new Sands(2, 10, 7, 1, 'rgb(168,160,8)'))
+            state.sands.push(new Sands(2, 7, 1, 1, 'rgb(168,160,8)'))
+            state.sands.push(new Sands(13, 7, 1, 1, 'rgb(168,160,8)'))
+            state.sands.push(new Sands(10, 10, 2, 1, 'rgb(168,160,8)'))
+            // buttons
+            state.buttons.push(new Button(3, 9, 1, 1, 'rgba(138,22,2,0.5)', 'red'))
+            state.buttons.push(new Button(2, 6, 1, 1, 'rgba(138,22,2,0.5)', 'blue'))
+            //gate
+            state.gates.push(new Gate(9, 10, 1, 1, 'rgb(138,22,2)', 'red'))
+            state.gates.push(new Gate(6, 9, 1, 1, 'rgb(138,22,2)', 'red'))
+            state.gates.push(new Gate(5, 3, 1, 1, 'rgb(138,22,2)', 'blue'))
+            //Ladder
+            state.ladders.push(new Ladder(11,4, 1, 3, 'rgba(225,225,224,1)'))
+            state.ladders.push(new Ladder(4, 4, 1, 6, 'rgba(225,225,224,1)'))
+            //Box
+            state.boxes.push(new Barrel(12, 3, 1, 1, 'rgba(183,113,28,1)'))
+            // objects
+            state.objects.push(new Item(6, 3, 'rgb(164,105,227)', GAME_OBJ.BARREL))
+
+            state.player = new Player(13, 3, 1, 1, 'rgba(15,75,208,1)')
+            state.target = new Gold(11, 9, 'rgba(105,209,227,1)', GAME_OBJ.GOLD)
+        });
+
+// Последний уровень
+        stages.set(13, () => {
 
             state.stageDescription = 'Продолжение следует...'
             // inventory
