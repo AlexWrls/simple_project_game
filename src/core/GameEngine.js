@@ -2,6 +2,7 @@ import Stages from './Stages.js';
 import {background, baseHeight, baseWidth, canvas, cat, ctx, game_debug, GRID_SIZE, SOUND, state} from "../constants";
 import SoundEffect from "./SoundEffect";
 import drawSpeechBubble from "../effects/DrawSpeechBubble";
+import drawSpaceBackground from "../effects/DrawSpaceBackground";
 
 export default class GameEngine {
 
@@ -79,7 +80,11 @@ export default class GameEngine {
         // Очистка canvas
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         if (!game_debug) {
-            ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
+            drawSpaceBackground(ctx, {
+                starCount: 300,
+                speed: 0.1,
+            });
+            // ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
         }
         // Расчет FPS
         if (state.lastTime) {
