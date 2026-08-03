@@ -1,8 +1,7 @@
 import GameEngine from "./core/GameEngine";
 import resizeCanvas, {initCanvas} from "./constants";
 
-
-window.addEventListener('DOMContentLoaded', () => {
+window.addEventListener('DOMContentLoaded', async () => {
     console.log('DOM loaded');
 
     const canvasElement = document.getElementById('stateCanvas');
@@ -14,10 +13,9 @@ window.addEventListener('DOMContentLoaded', () => {
     if (initCanvas(canvasElement)) {
         window.addEventListener('load', resizeCanvas);
         window.addEventListener('resize', resizeCanvas);
-        setTimeout(() => {
-            new GameEngine()
-        }, 500)
+        await new Promise(resolve => setTimeout(resolve, 500));
+        const game = new GameEngine();
+        await game.preview()
     }
-
 });
 
