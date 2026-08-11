@@ -19,7 +19,7 @@ export default class MoveBlock extends Block {
         this.targetX = x * GRID_SIZE;
         this.targetY = y * GRID_SIZE;
         this.steps = 0;
-        this.moveSpeed = 1;
+        this.moveSpeed = 2;
         this.isFalling = false;
         this.direction = 0;
         this.onLadder = false;
@@ -45,21 +45,33 @@ export default class MoveBlock extends Block {
         const dx = this.x - this.targetX;
         const dy = this.y - this.targetY;
 
-
         if (dy === 0 && dx === 0) {
             this.isMoving = false
             if (this.isFalling) {
-               state.audio.get(SOUND.FALL).playSound()
+                state.audio.get(SOUND.FALL).playSound()
             }
             this.isFalling = false
             return
         }
-        this.steps += 1
-        const dirX = dx < 1 ? this.moveSpeed : -this.moveSpeed
-        const dirY = dy < 1 ? this.moveSpeed : -this.moveSpeed
+        this.steps += this.moveSpeed
 
-        this.x += dirX
-        this.y += dirY
+        if (dx !== 0) {
+            const dirX = dx < 0 ? this.moveSpeed : -this.moveSpeed;
+            if (Math.abs(dx) <= this.moveSpeed) {
+                this.x = this.targetX;
+            } else {
+                this.x += dirX;
+            }
+        }
+
+        if (dy !== 0) {
+            const dirY = dy < 0 ? this.moveSpeed : -this.moveSpeed;
+            if (Math.abs(dy) <= this.moveSpeed) {
+                this.y = this.targetY;
+            } else {
+                this.y += dirY;
+            }
+        }
     }
 
 }

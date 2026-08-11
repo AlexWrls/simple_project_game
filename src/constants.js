@@ -25,7 +25,7 @@ export function initCanvas(canvasElement) {
         objects: [],
         target: null,
         keys: null,
-        eventKey: null,
+        eventKey: new Set(),
         audio: [],
         inventory: null
     }

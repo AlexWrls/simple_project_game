@@ -38,7 +38,6 @@ export default class GameEngine {
     }
 
     preview(step, reloadText) {
-        // document.getElementById('loader').style.display = 'block';
         state.audio.get(SOUND.BACKGROUND).pauseSound()
         clearInterval(state.time)
         ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -49,7 +48,6 @@ export default class GameEngine {
         ctx.fillText(`Уровень ${state.stage}`, 100, 300);
         ctx.fillStyle = '#caccc1';
         ctx.font = '30px Calibri';
-        // ctx.fillText(`== ${state.stageDescription} ==`, 400 - (state.stageDescription.length * 3), 400);
         ctx.font = '30px Calibri';
         ctx.fillStyle = '#69d1e3';
         ctx.fillText(`Для начала уровня жми 'Enter' или 'Space'`, 100, 650);
@@ -72,7 +70,7 @@ export default class GameEngine {
         state.audio.get(SOUND.STEP).setLoop(true)
         state.time = setInterval(() => {
             this.main()
-        }, 8)
+        }, 10)
     }
 
 
@@ -84,13 +82,21 @@ export default class GameEngine {
                 starCount: 300,
                 speed: 0.1,
             });
-            // ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
         }
         // Расчет FPS
         if (state.lastTime) {
             state.fps = Math.round(1000 / (timestamp - state.lastTime));
         }
 
+        // зажатые клавиши
+        if (!state.player.isMoving && !state.player.gravity && state.eventKey.size > 0) {
+            const keys = Array.from(state.eventKey);
+            const lastKey = keys[keys.length - 1];
+
+            if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(lastKey)) {
+                this.handlePlayerInput(lastKey);
+            }
+        }
 
         //------ Основное перемещение -------------
         state.player.gravity = !state.player.collision(state.player.x, state.player.y, [...state.ladders])
@@ -185,12 +191,6 @@ export default class GameEngine {
             }
         }
 
-        //------ Кнопки - Ворота/ -------------
-
-        // state.buttons.forEach(e => console.log(e.type + "|" + e.active))
-        // state.gates.forEach(e => console.log(e.type + "|" + e.open))
-        //-------------------
-
         if (game_debug) {
             for (const obj of [...state.guns, ...state.portals, ...state.walls, ...state.sands, ...state.ladders, ...state.boxes, ...state.buttons, state.target, ...state.objects, state.player]) {
                 ctx.fillStyle = obj.color;
@@ -244,36 +244,47 @@ export default class GameEngine {
 
     handleKeyDown(event) {
         event.preventDefault();
-        this.handlePlayerInput(event.key);
+        const key = event.key;
+        state.eventKey.add(key);
+        state.lastKey = key
+        this.handlePlayerInput(key);
     }
 
     handleKeyUp(event) {
         event.preventDefault();
-        state.eventKey = 'stop'
+        const key = event.key;
+        state.eventKey.delete(key);
+        if (state.eventKey.size === 0) {
+            state.keys = 'stop';
+        }
     }
 
     handlePlayerInput = (key) => {
         if (key === 'Enter' || key === ' ') {
             this.initial();
+            return;
         }
         if (key === 'z' || key === 'я') {
             if (state.stage > 1) state.stage--;
             this.preview();
+            return;
         }
         if (key === 'x' || key === 'ч') {
             if (state.stage < 13) state.stage++;
             this.preview();
+            return;
         }
         if (key === 'm' || key === 'ь') {
             state.audio.get(SOUND.BACKGROUND).muteSound();
+            return;
         }
 
-        // Если игрок уже движется
+        // Если игрок уже движется или падает - игнорируем
         if (state.player.isMoving || state.player.gravity) {
             return;
         }
+
         state.inventory.handleCreate(key)
-        state.eventKey = key;
         state.keys = key;
 
         let targetY = key === 'ArrowDown' ? state.player.y + GRID_SIZE : state.player.y - GRID_SIZE;
@@ -297,7 +308,6 @@ export default class GameEngine {
     //Проверяет перемещение игрока, устанавливает координаты в случае успеха
     // return true - перемещение возможно / false - иначе
     handlePlayerMove(x, y, targetX) {
-        console.log("x=" + x + "   targetX=" + targetX)
         state.player.x = x
         state.player.y = y
         let isCollisionBox = false;
@@ -306,7 +316,6 @@ export default class GameEngine {
         if (!state.player.isMoving && !state.player.collision(targetX, state.player.y, [...state.walls,...state.sands])) {
             for (const box of [...state.boxes]) {
                 if (!box.isMoving && !box.gravity && state.player.collision(targetX, state.player.y, [box])) {
-                    console.log(state.player.direction)
                     const dirX = state.player.x - targetX > 0 ? -GRID_SIZE : GRID_SIZE;
                     const boxTargetX = box.x + dirX;
                     state.player.isPush = true;

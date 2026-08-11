@@ -34,6 +34,7 @@ export default class Stages {
         state.guns = []
         state.objects = []
         state.inventory = new Inventory(0, 0, 0, 0)
+        state.eventKey = new Set()
         this.stages.get(num)()
     }
 

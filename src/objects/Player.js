@@ -64,7 +64,6 @@ export default class Player extends MoveBlock {
 
         let frame = this.tick % 10;
         let xf = frame * 83;
-        state.keys = !this.isMoving && state.eventKey === 'stop' ? 'stop' : state.keys
         const left = state.keys === 'ArrowLeft'
         const right = state.keys === 'ArrowRight'
         const up = state.keys === 'ArrowUp'

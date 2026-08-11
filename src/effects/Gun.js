@@ -17,7 +17,7 @@ export default class Gun extends MoveBlock {
         this.imgBull = new Image();
         this.imgBang.src = 'resource/obj/bang.png'
         this.imgBull.src = 'resource/obj/bul.png'
-        this.moveSpeed = 3
+        this.moveSpeed = 10
         this.coll = false
         this.direction = state.player.direction === 'ArrowLeft' ? -2 : 2
         this.tick = 0
@@ -78,5 +78,23 @@ export default class Gun extends MoveBlock {
                 Math.floor(scaledWidth * 2), Math.floor(scaledHeight * 2.5),  // конечные координаты (x,y,w,h)
             );
         }
+    }
+
+    move() {
+        this.isMoving = true
+        const dx = this.x - this.targetX;
+
+        if (dx === 0) {
+            this.isMoving = false
+            if (this.isFalling) {
+                state.audio.get(SOUND.FALL).playSound()
+            }
+            this.isFalling = false
+            return
+        }
+        this.steps += 1
+        const dirX = dx < 1 ? this.moveSpeed : -this.moveSpeed
+        this.x += dirX
+
     }
 }
