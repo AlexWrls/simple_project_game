@@ -55,22 +55,13 @@ export default class MoveBlock extends Block {
         }
         this.steps += this.moveSpeed
 
+        const dirX = dx < this.moveSpeed ? this.moveSpeed : -this.moveSpeed
+        const dirY = dy < this.moveSpeed ? this.moveSpeed : -this.moveSpeed
         if (dx !== 0) {
-            const dirX = dx < 0 ? this.moveSpeed : -this.moveSpeed;
-            if (Math.abs(dx) <= this.moveSpeed) {
-                this.x = this.targetX;
-            } else {
-                this.x += dirX;
-            }
+            this.x += dirX
         }
-
         if (dy !== 0) {
-            const dirY = dy < 0 ? this.moveSpeed : -this.moveSpeed;
-            if (Math.abs(dy) <= this.moveSpeed) {
-                this.y = this.targetY;
-            } else {
-                this.y += dirY;
-            }
+            this.y += dirY
         }
     }
 

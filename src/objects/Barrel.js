@@ -26,7 +26,7 @@ export default class Barrel extends MoveBlock {
     }
 
     checkState() {
-        if (this.collision(this.x, this.y, [...state.sands])){
+        if (this.collision(this.x, this.y + 1 , [...state.sands])){
             this.direction = 0
             this.isMoving = false;
         }else if (this.direction !== 0 && !this.isMoving && !this.collision(this.x + this.direction, this.y, [...state.walls, ...state.boxes])) {

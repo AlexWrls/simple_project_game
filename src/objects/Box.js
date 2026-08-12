@@ -20,7 +20,7 @@ export default class Box extends MoveBlock {
     }
 
     checkState() {
-        if (this.collision(this.x, this.y, [...state.sands])) {
+        if (this.collision(this.x, this.y + 1, [...state.sands])) {
             this.isSands = true;
         }
     }
