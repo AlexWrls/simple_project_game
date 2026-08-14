@@ -9,13 +9,23 @@ window.addEventListener('DOMContentLoaded', async () => {
         console.error('Canvas element not found!');
         return;
     }
+    const loader = document.getElementById('loader');
 
     if (initCanvas(canvasElement)) {
-        window.addEventListener('load', resizeCanvas);
-        window.addEventListener('resize', resizeCanvas);
-        await new Promise(resolve => setTimeout(resolve, 500));
+        await new Promise(resolve => {
+            if (document.readyState === 'complete') {
+                resolve();
+            } else {
+                window.addEventListener('load', resolve);
+            }
+        });
+        if (loader) {
+            loader.style.display = 'none';
+        }
+        resizeCanvas();
         const game = new GameEngine();
-        await game.preview()
+        await game.preview();
+
+        window.addEventListener('resize', resizeCanvas);
     }
 });
-
