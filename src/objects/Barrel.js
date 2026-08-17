@@ -26,10 +26,10 @@ export default class Barrel extends MoveBlock {
     }
 
     checkState() {
-        if (this.collision(this.x, this.y + 1 , [...state.sands])){
+        if (this.collision(this.x, this.y + 1, [...state.sands])) {
             this.direction = 0
             this.isMoving = false;
-        }else if (this.direction !== 0 && !this.isMoving && !this.collision(this.x + this.direction, this.y, [...state.walls, ...state.boxes])) {
+        } else if (this.direction !== 0 && !this.isMoving && !this.collision(this.x + this.direction, this.y, [...state.walls, ...state.boxes, state.player])) {
             this.targetX = this.x + this.direction
         } else if (!this.isMoving && this.direction !== 0) {
             state.audio.get(SOUND.FALL).playSound()

@@ -226,18 +226,21 @@ export default class GameEngine {
         ctx.fillText(`Шаги: ${Math.round(state.player.steps / GRID_SIZE)}`, baseWidth - GRID_SIZE * 2, baseHeight - GRID_SIZE / 2);
         state.inventory.draw()
         state.lastTime = timestamp;
+        //Проверка ухода за границу
+        if (state.player.x > canvas.width || state.player.y > canvas.height) {
+            state.audio.get(SOUND.STEP).setLoop(false)
+            state.audio.get(SOUND.RELOAD_LEVEL).playSound()
+            this.preview(undefined, true)
+        }
+        ['guns', 'boxes'].forEach(key => {
+            state[key] = state[key].filter(obj => obj.x < canvas.width && obj.y < canvas.height);
+        });
         //Проверка прохождения
         if (state.player.x === state.target.x && state.player.y === state.target.y) {
             state.audio.get(SOUND.STEP).setLoop(false)
             state.audio.get(SOUND.NEW_LEVEL).playSound()
             state.stage++
             this.preview(Math.round(state.player.steps / GRID_SIZE))
-        }
-        //Проверка ухода за границу
-        if (state.player.x > canvas.width || state.player.y > canvas.height) {
-            state.audio.get(SOUND.STEP).setLoop(false)
-            state.audio.get(SOUND.RELOAD_LEVEL).playSound()
-            this.preview(undefined, true)
         }
     }
 
@@ -270,7 +273,7 @@ export default class GameEngine {
             return;
         }
         if (key === 'x' || key === 'ч') {
-            if (state.stage < 13) state.stage++;
+            if (state.stage < 14) state.stage++;
             this.preview();
             return;
         }

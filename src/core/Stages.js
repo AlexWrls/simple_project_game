@@ -388,8 +388,34 @@ export default class Stages {
             state.target = new Gold(11, 9, 'rgba(105,209,227,1)', GAME_OBJ.GOLD)
         });
 
-// Последний уровень
         stages.set(13, () => {
+            state.stageDescription = 'Никогда не торопись — успеешь, \nа если не успел — ну и хрен с ним.'
+            // walls
+            state.walls.push(new Ground(2, 5, 6, 1, 'rgb(2,137,13)'))
+            state.walls.push(new Ground(9, 5, 4, 1, 'rgb(2,137,13)'))
+            state.walls.push(new Ground(14, 5, 1, 1, 'rgb(2,137,13)'))
+            state.walls.push(new Ground(3, 10, 14, 1, 'rgb(2,137,13)'))
+            // sands
+            state.sands.push(new Sands(13, 5, 1, 1, 'rgb(168,160,8)'))
+
+            // buttons
+            state.buttons.push(new Button(8, 9, 1, 1, 'rgba(138,22,2,0.5)', 'blue'))
+            //gate
+            state.gates.push(new Gate(8, 5, 1, 1, 'rgb(138,22,2)', 'blue'))
+            state.gates.push(new Gate(14, 9, 1, 1, 'rgb(138,22,2)', 'blue'))
+
+            //Box
+            state.boxes.push(new Barrel(6, 9, 1, 1, 'rgba(183,113,28,1)'))
+            //portals
+            state.portals.push(new Portal(5, 4, 1, 1, '#69d1e3', 'blue'))
+            state.portals.push(new Portal(12, 9, 1, 1, '#69d1e3', 'blue'))
+
+            state.player = new Player(4, 9, 1, 1, 'rgba(15,75,208,1)')
+            state.target = new Gold(3, 4, 'rgba(105,209,227,1)', GAME_OBJ.GOLD)
+        });
+
+// Последний уровень
+        stages.set(14, () => {
 
             state.stageDescription = 'Продолжение следует...'
             // inventory
