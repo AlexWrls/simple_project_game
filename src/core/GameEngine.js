@@ -232,9 +232,9 @@ export default class GameEngine {
             state.audio.get(SOUND.RELOAD_LEVEL).playSound()
             this.preview(undefined, true)
         }
-        ['guns', 'boxes'].forEach(key => {
-            state[key] = state[key].filter(obj => obj.x < canvas.width && obj.y < canvas.height);
-        });
+//        ['guns', 'boxes'].forEach(key => {
+//            state[key] = state[key].filter(obj => obj.x < canvas.width && obj.y < canvas.height);
+//        });
         //Проверка прохождения
         if (state.player.x === state.target.x && state.player.y === state.target.y) {
             state.audio.get(SOUND.STEP).setLoop(false)
