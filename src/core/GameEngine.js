@@ -40,6 +40,7 @@ export default class GameEngine {
     preview(step, reloadText) {
         state.audio.get(SOUND.BACKGROUND).pauseSound()
         clearInterval(state.time)
+        clearInterval(state.garbageCollector)
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         this.stages.loadLevel(state.stage)
         ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -71,6 +72,9 @@ export default class GameEngine {
         state.time = setInterval(() => {
             this.main()
         }, 10)
+        state.garbageCollector = setInterval(() => {
+            this.garbageCollector()
+        }, 1000)
     }
 
 
@@ -226,15 +230,6 @@ export default class GameEngine {
         ctx.fillText(`Шаги: ${Math.round(state.player.steps / GRID_SIZE)}`, baseWidth - GRID_SIZE * 2, baseHeight - GRID_SIZE / 2);
         state.inventory.draw()
         state.lastTime = timestamp;
-        //Проверка ухода за границу
-        if (state.player.x > canvas.width || state.player.y > canvas.height) {
-            state.audio.get(SOUND.STEP).setLoop(false)
-            state.audio.get(SOUND.RELOAD_LEVEL).playSound()
-            this.preview(undefined, true)
-        }
-//        ['guns', 'boxes'].forEach(key => {
-//            state[key] = state[key].filter(obj => obj.x < canvas.width && obj.y < canvas.height);
-//        });
         //Проверка прохождения
         if (state.player.x === state.target.x && state.player.y === state.target.y) {
             state.audio.get(SOUND.STEP).setLoop(false)
@@ -245,8 +240,25 @@ export default class GameEngine {
     }
 
 
+    garbageCollector(){
+        //Проверка ухода за границу
+        if (state.player.x > canvas.width || state.player.y > canvas.height) {
+            state.audio.get(SOUND.STEP).setLoop(false)
+            state.audio.get(SOUND.RELOAD_LEVEL).playSound()
+            this.preview(undefined, true)
+        }
+        // очистка объектов
+        ['guns', 'boxes'].forEach(key => {
+            console.log(key+ ' = ' +state[key].length)
+            state[key] = state[key].filter(obj => obj.x < canvas.width && obj.y < canvas.height);
+        });
+    }
+
     handleKeyDown(event) {
         event.preventDefault();
+        if (state.player.isGun) {
+            return;
+        }
         const key = event.key;
         state.eventKey.add(key);
         state.lastKey = key

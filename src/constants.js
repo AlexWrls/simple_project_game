@@ -12,6 +12,7 @@ export function initCanvas(canvasElement) {
         stage: 1,
         stageDescription: '',
         time: null,
+        garbageCollector : null,
         fps: 0,
         player: null,
         walls: [],
