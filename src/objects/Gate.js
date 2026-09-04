@@ -4,6 +4,7 @@ import {ctx, GRID_SIZE, SOUND, state} from "../constants";
 export default class Gate extends MoveBlock {
     imgClose;
     imgOpen;
+    imgColor;
     open;
     wasOpen;
     buttons;
@@ -19,8 +20,10 @@ export default class Gate extends MoveBlock {
         this.wasOpen = this.buttons.some(btn => btn.active)
         this.imgClose = new Image()
         this.imgOpen = new Image()
-        this.imgClose.src = `resource/obj/gate/gate_${this.type}.png`
-        this.imgOpen.src = `resource/obj/gate/gate_open.png`
+        this.imgColor = new Image()
+        this.imgClose.src = `resource/obj/gate/gate_common_close.png`
+        this.imgOpen.src = `resource/obj/gate/gate_common_open.png`
+        this.imgColor.src = `resource/obj/gate/gate_${type}.png`
     }
 
     checkState() {
@@ -39,6 +42,14 @@ export default class Gate extends MoveBlock {
     }
 
     draw() {
-        ctx.drawImage(this.open ? this.imgOpen : this.imgClose, this.x, this.y + 10, GRID_SIZE + 20, GRID_SIZE + 20)
+        ctx.drawImage(this.imgColor, this.x, this.y - 10, GRID_SIZE + 40, GRID_SIZE + 40)
+    }
+
+    drawCommon() {
+        if (this.open) {
+            ctx.drawImage(this.imgOpen, this.x, this.y - 10, GRID_SIZE + 40, GRID_SIZE + 40)
+        } else {
+            ctx.drawImage(this.imgClose, this.x, this.y - 10, GRID_SIZE + 40, GRID_SIZE + 40)
+        }
     }
 }

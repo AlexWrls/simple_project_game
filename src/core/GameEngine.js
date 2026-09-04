@@ -211,13 +211,19 @@ export default class GameEngine {
                 }
             }
         } else {
-            const drawObj = [...state.portals, state.target, ...state.walls, ...state.sands, ...state.boxes, ...state.gates, ...state.buttons]
+            for(const backGage of  state.gates){
+                backGage.drawCommon();
+            }
+            const drawObj = [...state.portals, state.target, ...state.walls, ...state.sands, ...state.boxes, ...state.buttons]
                 .sort((a, b) => a.targetX - b.targetX || b.targetY - a.targetY || b.zIndex - a.zIndex)
             // drawObj.forEach(i=>console.log(i.x))
             for (const obj of [...state.ladders, ...drawObj, ...state.objects, ...state.guns]) {
                 obj.draw()
             }
             state.player.draw()
+            for(const backGage of  state.gates){
+                backGage.draw();
+            }
         }
 
         // Отрисовка информации
