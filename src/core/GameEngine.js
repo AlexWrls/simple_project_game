@@ -33,6 +33,7 @@ export default class GameEngine {
         map.set(SOUND.RELOAD_LEVEL, new SoundEffect('reload_level.mp3', 1, 1, 1));
         map.set(SOUND.BANG, new SoundEffect('bang.mp3', 1, 0.8, 5));
         map.set(SOUND.SHOT, new SoundEffect('fire.mp3', 1, 0.6, 5));
+        map.set(SOUND.BLOW_TO_HEAD, new SoundEffect('blow_to_head.mp3', 1, 0.6, 5));
 
         return map
     }
@@ -262,7 +263,7 @@ export default class GameEngine {
 
     handleKeyDown(event) {
         event.preventDefault();
-        if (state.player.isGun) {
+        if (state.player.isGun || state.player.frees) {
             return;
         }
         const key = event.key;

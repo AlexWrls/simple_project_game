@@ -12,9 +12,11 @@ export default class Player extends MoveBlock {
     imgStand;
     imgFalling;
     imgLadder;
+    imgBlow;
     isPush;
     isGun;
     tick;
+    frees;
     zIndex;
 
     constructor(x, y, width, height, color) {
@@ -22,6 +24,7 @@ export default class Player extends MoveBlock {
         this.zIndex = 10
         this.isPush = false
         this.isGun = false
+        this.frees = false
         this.imgLeft = new Image()
         this.imgRight = new Image()
         this.imgRightPush = new Image()
@@ -31,6 +34,7 @@ export default class Player extends MoveBlock {
         this.imgStand = new Image()
         this.imgFalling = new Image()
         this.imgLadder = new Image()
+        this.imgBlow = new Image()
         this.imgLeft.src = 'resource/player/10-cat-left.png'
         this.imgRight.src = 'resource/player/10-cat-right.png'
         this.imgRightPush.src = 'resource/player/cat-right-push.png'
@@ -40,6 +44,7 @@ export default class Player extends MoveBlock {
         this.imgStand.src = 'resource/player/cat-stand.png'
         this.imgFalling.src = 'resource/player/cat-fail.png'
         this.imgLadder.src = 'resource/player/cat-ladder.png'
+        this.imgBlow.src = 'resource/player/cat-blow.png'
         this.tick = 0
         setInterval(() => {
             this.tick++
@@ -47,6 +52,16 @@ export default class Player extends MoveBlock {
                 this.tick = 0
             }
         }, 60)
+    }
+
+    move() {
+        if (this.frees) {
+            setTimeout(() => {
+                this.frees = false
+            }, 500)
+        } else {
+            super.move();
+        }
     }
 
     draw() {
@@ -72,7 +87,14 @@ export default class Player extends MoveBlock {
         if (Math.abs(state.player.x - state.player.targetX) > 20) {
             state.player.direction = state.player.x - state.player.targetX > 0 ? 'ArrowLeft' : 'ArrowRight';
         }
-        if (this.isGun) {
+        if (this.frees){
+            ctx.drawImage(
+                this.imgBlow,        // изображение спрайт-листа
+                Math.floor(xf), 0, Math.floor(srcWidth), Math.floor(srcHeight),  // исходные координаты (x,y,w,h)
+                Math.floor(this.x + offsetX), Math.floor(this.y + offsetY),
+                Math.floor(scaledWidth), Math.floor(scaledHeight),  // конечные координаты (x,y,w,h)
+            );
+        }else if (this.isGun) {
             this.tick = 0
             this.isMoving = false
             ctx.drawImage(

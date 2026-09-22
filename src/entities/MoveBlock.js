@@ -49,6 +49,11 @@ export default class MoveBlock extends Block {
             this.isMoving = false
             if (this.isFalling) {
                 state.audio.get(SOUND.FALL).playSound()
+                if (this.x === state.player.x && this.y + GRID_SIZE === state.player.y) {
+                    state.audio.get(SOUND.BLOW_TO_HEAD).playSound()
+                    state.player.frees = true
+                    state.player.eventKey = new Set()
+                }
             }
             this.isFalling = false
             return

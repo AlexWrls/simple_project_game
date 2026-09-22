@@ -50,6 +50,7 @@ export const SOUND = Object.freeze({
     RELOAD_LEVEL: 'RELOAD_LEVEL',
     BANG: 'BANG',
     SHOT: 'SHOT',
+    BLOW_TO_HEAD: 'BLOW_TO_HEAD',
 })
 
 export const GAME_OBJ = Object.freeze({
