@@ -1,5 +1,5 @@
 import Stages from './Stages.js';
-import {background, baseHeight, baseWidth, canvas, cat, ctx, game_debug, GRID_SIZE, SOUND, state} from "../constants";
+import {baseHeight, baseWidth, canvas, cat, ctx, game_debug, GRID_SIZE, SOUND, state} from "../constants";
 import SoundEffect from "./SoundEffect";
 import drawSpeechBubble from "../effects/DrawSpeechBubble";
 import drawSpaceBackground from "../effects/DrawSpaceBackground";
@@ -292,7 +292,7 @@ export default class GameEngine {
             return;
         }
         if (key === 'x' || key === 'ч') {
-            if (state.stage < 14) state.stage++;
+            if (state.stage < this.stages.stages.size) state.stage++;
             this.preview();
             return;
         }

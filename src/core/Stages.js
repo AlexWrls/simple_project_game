@@ -377,7 +377,7 @@ export default class Stages {
             state.gates.push(new Gate(6, 9, 1, 1, 'rgb(138,22,2)', 'red'))
             state.gates.push(new Gate(5, 3, 1, 1, 'rgb(138,22,2)', 'blue'))
             //Ladder
-            state.ladders.push(new Ladder(11,4, 1, 3, 'rgba(225,225,224,1)'))
+            state.ladders.push(new Ladder(11, 4, 1, 3, 'rgba(225,225,224,1)'))
             state.ladders.push(new Ladder(4, 4, 1, 6, 'rgba(225,225,224,1)'))
             //Box
             state.boxes.push(new Barrel(12, 3, 1, 1, 'rgba(183,113,28,1)'))
@@ -414,8 +414,64 @@ export default class Stages {
             state.target = new Gold(3, 4, 'rgba(105,209,227,1)', GAME_OBJ.GOLD)
         });
 
-// Последний уровень
         stages.set(14, () => {
+            state.stageDescription = 'Из астраномии:\n— Почему две половинки не могут быть вместе?\n— Потому что они расходятся из-за любого овна.'
+
+            // objects
+            state.objects.push(new Item(8, 6, 'rgb(164,105,227)', GAME_OBJ.GUN))
+            state.objects.push(new Item(9, 6, 'rgb(164,105,227)', GAME_OBJ.GUN))
+            state.objects.push(new Item(10, 6, 'rgb(164,105,227)', GAME_OBJ.GUN))
+
+//            Box
+            state.boxes.push(new Box(2, 2, 1, 1, 'rgba(183,113,28,1)'))
+            state.boxes.push(new Box(6, 3, 1, 1, 'rgba(183,113,28,1)'))
+            state.boxes.push(new Box(6, 4, 1, 1, 'rgba(183,113,28,1)'))
+            state.boxes.push(new Box(9, 3, 1, 1, 'rgba(183,113,28,1)'))
+            state.boxes.push(new Box(8, 3, 1, 1, 'rgba(183,113,28,1)'))
+            state.boxes.push(new Box(12, 4, 1, 1, 'rgba(183,113,28,1)'))
+            state.boxes.push(new Box(12, 3, 1, 1, 'rgba(183,113,28,1)'))
+            state.boxes.push(new Box(16, 2, 1, 1, 'rgba(183,113,28,1)'))
+
+            // walls
+            state.walls.push(new Sands(8, 4, 3, 1, 'rgb(2,137,13)'))
+            state.walls.push(new Ground(6, 5, 1, 1, 'rgb(2,137,13)'))
+            state.walls.push(new Ground(4, 3, 2, 1, 'rgb(2,137,13)'))
+            state.walls.push(new Ground(2, 3, 1, 1, 'rgb(2,137,13)'))
+
+            state.ladders.push(new Ladder(3, 3, 1, 7, 'rgba(225,225,224,1)'))
+            state.ladders.push(new Ladder(15, 3, 1, 7, 'rgba(225,225,224,1)'))
+
+            state.walls.push(new Ground(1, 7, 2, 1, 'rgb(2,137,13)'))
+            state.walls.push(new Ground(4, 7, 11, 1, 'rgb(2,137,13)'))
+            state.walls.push(new Ground(12, 5, 1, 1, 'rgb(2,137,13)'))
+            state.walls.push(new Ground(13, 3, 2, 1, 'rgb(2,137,13)'))
+            state.walls.push(new Ground(16, 3, 1, 1, 'rgb(2,137,13)'))
+            state.walls.push(new Ground(16, 7, 2, 1, 'rgb(2,137,13)'))
+
+            state.walls.push(new Sands(8, 10, 3, 1, 'rgb(2,137,13)'))
+            state.walls.push(new Ground(5, 10, 2, 1, 'rgb(2,137,13)'))
+            state.walls.push(new Ground(0, 10, 4, 1, 'rgb(2,137,13)'))
+            state.walls.push(new Ground(12, 10, 2, 1, 'rgb(2,137,13)'))
+            state.walls.push(new Ground(15, 10, 4, 1, 'rgb(2,137,13)'))
+
+            state.buttons.push(new Button(0, 9, 1, 1, 'rgba(138,22,2,0.5)', 'blue'))
+            state.buttons.push(new Button(18, 9, 1, 1, 'rgba(138,22,2,0.5)', 'blue'))
+            state.gates.push(new Gate(6, 9, 1, 1, 'rgb(138,22,2)', 'blue'))
+            state.gates.push(new Gate(7, 10, 1, 1, 'rgb(138,22,2)', 'blue'))
+            state.gates.push(new Gate(11, 10, 1, 1, 'rgb(138,22,2)', 'blue'))
+            state.gates.push(new Gate(12, 9, 1, 1, 'rgb(138,22,2)', 'blue'))
+
+
+            state.buttons.push(new Button(9, 3, 1, 1, 'rgba(138,22,2,0.5)', 'red'))
+            state.gates.push(new Gate(4, 10, 1, 1, 'rgb(138,22,2)', 'red'))
+            state.gates.push(new Gate(14, 10, 1, 1, 'rgb(138,22,2)', 'red'))
+
+            state.player = new Player(10, 3, 1, 1, 'rgba(15,75,208,1)')
+            state.target = new Gold(9, 9, 'rgba(105,209,227,1)', GAME_OBJ.GOLD)
+        });
+
+// Последний уровень
+        stages.set(15, () => {
 
             state.stageDescription = 'Продолжение следует...'
             // inventory
